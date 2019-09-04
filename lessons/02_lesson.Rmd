@@ -6,10 +6,10 @@ output:
   html_document:
     number_sections: true
     self_contained: TRUE
-    code_folding: hide
+    code_folding: show
     toc: TRUE
     toc_float: TRUE
-    css: www/web_report.css
+    css: ../www/web_report.css
     editor_options:
       chunk_output_type: console
 ---
@@ -20,51 +20,175 @@ output:
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
-![](www/images/urban-institute-logo.png)
-
-# Review 
-
-* Making maps in R is really powerful and easy
-*
-
-# Reading in Spatial Data
-
-Before you make maps, you need spatial data. Out in the wild, spatial data comes in many formats. Some of the common formats are:
-
-* CSV's with latitude/longitude
-* GeoJSON's (.geojson)
-* Shapefiles (.shp)
-
-the `sf` package has a function called `st_read()` that makes reading in any of these types of files easy.
-
-For GeoJSONs:
-```{r}
-data = st_read("path\to\geojson\file.geojson")
-
-```
-
-For Shapefiles:
-```{r}
-data = st_read("path\to\shp\file.shp")
-
-```
-
-For CSV's:
-```{r}
-data = st_read("path\to\csv\file.csv",
-               options = c("X_POSSIBLE_NAMES=x","Y_POSSIBLE_NAMES=y") )
-```
-
-
-
-# Reading in Spatial Data
-For CSV's:
+<!-- ![](../www/images/urban-institute-logo.png) -->
 
 
 ```{r rmarkdown-setup, echo = FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(eval = FALSE)
+
 ```
+
+
+# Review 
+
+* Making maps in R is really powerful and easy
+* The `sf` package handles point and polygon spatial data
+* sf objects are dataframes with an additional geometry column
+
+```{r, warning=F, message=F, eval = T}
+library(urbnmapr)
+library(urbnthemes)
+library(tidyverse)
+library(sf)
+library(tigris)
+set_urbn_defaults(style = 'map')
+```
+
+
+
+# Reading in spatial data
+
+ Out in the wild, spatial data comes in many formats but some of the common ones you will encounter are:
+
+* CSV's with lon/lat columns
+
+* GeoJSON's (.geojson)
+
+* Shapefiles (.shp)
+
+the `sf` package has a function called `st_read()` that makes reading in any of these types of files easy.
+
+<font color="#55b748"> For GeoJSONs and Shapefiles:</font>
+
+```{r, eval = F}
+data = st_read("path/to/geojson/file.geojson")
+data = st_read("path/to/shp/file.shp")
+```
+
+<font color="#55b748"> For CSV's:</font>
+
+```{r, eval = F}
+#You have two options!
+#1- Read in the file using st_read, but maniupulate some GDAL options
+data = st_read("path/to/csv/file.csv", 
+               options=c("X_POSSIBLE_NAMES=lon","Y_POSSIBLE_NAMES=lat"))
+
+#2- Read in the file as a data frame and convert it to an sf object
+data = read_csv("path/to/csv/file.csv")
+data = st_as_sf(data, coords = c("lon", "lat"))
+
+
+
+```
+
+`st_read` can also accept URL's!
+
+```{r, eval = T}
+data = st_read("https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson")
+```
+
+Notice that it  figured out what filetype it was and what kind of point/polygon data it was.
+
+
+# Writing out spatial data
+
+sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or any other spatial file format your heart desires. We recommend  saving your spatial files as GeoJSON's whenever you can for for a few reasons:
+
+  1) It's a pretty universal file format that can easily be read back into R or other programs like ArcGIS, or Python
+  2) It uses standardized projections and naming conventions, which saves you a lot of headaches down the road
+  
+  
+<font color="#55b748"> Writing out GeoJSONs and Shapefiles: </font>
+
+```{r}
+st_write(sf_data, "output/path/filename.geojson")
+st_write(sf_data, "output/path/filename.shp")
+
+```
+
+
+<font color="#55b748"> Writing out CSV's </font>
+
+There may be some cases when you need to write out your spatial data as a CSV and sf does let you do that, but your longitude and latitude columns will be labelled X and Y respectively. If you need to write out CSV's we recommend writing out a WKT (Well Known Text) column instead of X and Y columns because WKT columns can be used to store polygon data, and they use more standard naming conventions that can easily be read into R or other programs. WKT columns represent the same data as X and Y columns but in a slightly different format.
+
+|X|Y|
+|-|-|
+|-76.9651|38.89204|
+
+
+|WKT|
+|:--|
+|POINT (-76.9651, 38.89204)|
+
+And here's how you write out CSV's both ways using `sf_write`:
+
+```{r, eval = F}
+# Writing out X and Y columsn to CSV
+st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv", 
+          layer_options = "GEOMETRY=AS_XY")
+
+# Writing out WKT columns to CSV
+st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv", 
+          layer_options = "GEOMETRY=AS_WKT")
+
+
+
+```
+
+
+# Where can I find spatial data?
+
+The `tigris` package in R is a great place to start looking. `tigris` provides spatial data for:
+
+* Census Block Groups, Blocks and Tracts
+* Counties, ZCTA's, PUMA's, Places, 
+* congressinal districts, School Districts
+* roads, railways, native areas, military bases
+* Lots of other formats!
+
+It provides powerful functionality by allowing you to filter to specific states, counties, or tracts. Say for example I wanted data on all block groups in DC
+
+```{r, fig.width=4, fig.height =4, eval = T}
+dc = tigris::block_groups(state = "DC", year = 2017, 
+                          class = "sf",
+                          progress_bar = FALSE)
+
+ggplot(dc)+
+  geom_sf()
+
+```
+
+
+
+Below are some other common places to find spatial data
+
+* [Open Data Portals](https://opendata.dc.gov/)
+
+* 
+
+
+# Exercise 1
+
+<font color="#55b748">**Step 1:**</font> Create a new directory called `urbn101`
+
+<font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `urbn101` directory.
+
+<font color="#55b748">**Step 3:**</font> Open a `.R` script with the button in the top left. Save the script as `01_data-visualization.R`.
+
+<font color="#55b748">**Step 4:**</font> Submit `install.packages("tidyverse")` to the Console.
+
+<font color="#55b748">**Step 5:**</font> Write `library(tidyverse)` at the top of `01_data-visualization.R`. With the cursor on the line of text, click Control-Enter.
+
+
+
+
+
+
+
+
 
 
 
