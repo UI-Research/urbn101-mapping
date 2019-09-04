@@ -22,33 +22,43 @@ output:
 
 ![](www/images/urban-institute-logo.png)
 
-# Review
+# Review 
 
-# Types of Spatial Data
+* Making maps in R is really powerful and easy
+*
 
-Out in the wild, spatial data comes in many formats. Some of the common formats are:
+# Reading in Spatial Data
+
+Before you make maps, you need spatial data. Out in the wild, spatial data comes in many formats. Some of the common formats are:
 
 * CSV's with latitude/longitude
 * GeoJSON's (.geojson)
 * Shapefiles (.shp)
 
-the `sf` package has a function called `st_read()` that makes reading in any of these files easy.
+the `sf` package has a function called `st_read()` that makes reading in any of these types of files easy.
 
 For GeoJSONs:
 ```{r}
-gejson_data = st_read("path\to\geojson\file.geojson")
-shpfile_data = st_read("path\to\shp\file.shp")
+data = st_read("path\to\geojson\file.geojson")
 
 ```
 
-
 For Shapefiles:
+```{r}
+data = st_read("path\to\shp\file.shp")
 
-X = Longitude
-Y = Latitude
+```
+
+For CSV's:
+```{r}
+data = st_read("path\to\csv\file.csv",
+               options = c("X_POSSIBLE_NAMES=x","Y_POSSIBLE_NAMES=y") )
+```
+
+
 
 # Reading in Spatial Data
-
+For CSV's:
 
 
 ```{r rmarkdown-setup, echo = FALSE}
@@ -56,8 +66,5 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 ```
 
-```{r setup}
-options(scipen = 999)
 
-library(tidyverse)
-```
+
