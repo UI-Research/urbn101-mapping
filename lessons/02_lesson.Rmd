@@ -1,0 +1,63 @@
+---
+title: "Day 2: Working with Spatial Data"
+author: "Ajjit Narayanan"
+date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
+output:
+  html_document:
+    number_sections: true
+    self_contained: TRUE
+    code_folding: hide
+    toc: TRUE
+    toc_float: TRUE
+    css: www/web_report.css
+    editor_options:
+      chunk_output_type: console
+---
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+</style>
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
+
+![](www/images/urban-institute-logo.png)
+
+# Review
+
+# Types of Spatial Data
+
+Out in the wild, spatial data comes in many formats. Some of the common formats are:
+
+* CSV's with latitude/longitude
+* GeoJSON's (.geojson)
+* Shapefiles (.shp)
+
+the `sf` package has a function called `st_read()` that makes reading in any of these files easy.
+
+For GeoJSONs:
+```{r}
+gejson_data = st_read("path\to\geojson\file.geojson")
+shpfile_data = st_read("path\to\shp\file.shp")
+
+```
+
+
+For Shapefiles:
+
+X = Longitude
+Y = Latitude
+
+# Reading in Spatial Data
+
+
+
+```{r rmarkdown-setup, echo = FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+```{r setup}
+options(scipen = 999)
+
+library(tidyverse)
+```
