@@ -1,5 +1,5 @@
 ---
-title: "Day 1: Let's make a Map!"
+title: "Day 1: Let's Make a Map in R"
 author: ""
 date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
 output:
@@ -9,7 +9,7 @@ output:
     code_folding: hide
     toc: TRUE
     toc_float: TRUE
-    css: www/web_report.css
+    css: ../www/web_report.css
     editor_options:
       chunk_output_type: console
 ---
@@ -20,11 +20,7 @@ output:
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
-![](www/images/urban-institute-logo.png)
-
-# Document title
-
-## Subtitle 1
+![](../www/images/urban-institute-logo.png)
 
 ```{r rmarkdown-setup, echo = FALSE}
 knitr::opts_chunk$set(warning = FALSE)
@@ -36,3 +32,47 @@ options(scipen = 999)
 
 library(tidyverse)
 ```
+
+# Welcome!
+
+Why should you map in R?
+
+* **<font color="#ec008b"> Reproducable. </font>** Writing code provides a road map for other researchers (and future you) on how your map was created and what analysis steps were taken.
+* **<font color="#ec008b"> Iteration. </font>** Want to make the same map for 10 different years? Want to make a map of all the counties in each state? This can be as simple as adding one more line of code.
+* **<font color="#ec008b"> Easy for analysis. </font>** There are huge benefits to using the same software to run your analysis and then make your map.
+* **<font color="#ec008b"> Free and open source! </font>** We are lucky and have great access to software at Urban- but outside of work, it can be expensive (financially and computationally!) to get other GIS software.
+
+# Getting Started with R
+
+A few basics:
+
+* What is R Studio? 
+* The console and the global environment
+* The assignment operator
+* R packages
+* R projects
+
+# Exercise 0
+
+<font color="#55b748">**Step 1:**</font> Create a new directory called `mapping`
+
+<font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `mapping` directory.
+
+<font color="#55b748">**Step 3:**</font> Open a `.R` script with the button in the top left. Save the script as `01_intro-to-mapping.R`.
+
+<font color="#55b748">**Step 4:**</font> Submit `install.packages("tidyverse")` to the Console.
+
+<font color="#55b748">**Step 5:**</font> Submit `install.packages("devtools")` to the Console.
+
+<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
+
+<font color="#55b748">**Step 7:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
+
+<font color="#55b748">**Step 8:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
+
+# Making a map
+
+
+# What are simple features?
+
+
