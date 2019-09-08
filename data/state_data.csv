@@ -1,52 +1,52 @@
-state_name,medhhincome,income_groups
-Alabama,44700,"< $45,000"
-Alaska,70600,"> $70,000"
-Arizona,51000,"$50,000-$55,000"
-Arkansas,42000,"< $45,000"
-California,64600,"$60,000-$65,000"
-Colorado,63500,"$60,000-$65,000"
-Connecticut,71700,"> $70,000"
-Delaware,61200,"$60,000-$65,000"
-District of Columbia,75000,"> $70,000"
-Florida,49000,"$45,000-$50,000"
-Georgia,50601,"$50,000-$55,000"
-Hawaii,73000,"> $70,000"
-Idaho,49000,"$45,000-$50,000"
-Illinois,59000,"$55,000-$60,000"
-Indiana,50000,"$45,000-$50,000"
-Iowa,54600,"$50,000-$55,000"
-Kansas,54000,"$50,000-$55,000"
-Kentucky,45000,"< $45,000"
-Louisiana,45000,"< $45,000"
-Maine,50400,"$50,000-$55,000"
-Maryland,76000,"> $70,000"
-Massachusetts,70000,"$65,000-$70,000"
-Michigan,50300,"$50,000-$55,000"
-Minnesota,63000,"$60,000-$65,000"
-Mississippi,40000,"< $45,000"
-Missouri,50000,"$45,000-$50,000"
-Montana,50000,"$45,000-$50,000"
-Nebraska,55000,"$50,000-$55,000"
-Nevada,52000,"$50,000-$55,000"
-New Hampshire,69800,"$65,000-$70,000"
-New Jersey,72500,"> $70,000"
-New Mexico,45000,"< $45,000"
-New York,60400,"$60,000-$65,000"
-North Carolina,48000,"$45,000-$50,000"
-North Dakota,60000,"$55,000-$60,000"
-Ohio,50500,"$50,000-$55,000"
-Oklahoma,49000,"$45,000-$50,000"
-Oregon,54950,"$50,000-$55,000"
-Pennsylvania,55000,"$50,000-$55,000"
-Rhode Island,58000,"$55,000-$60,000"
-South Carolina,46600,"$45,000-$50,000"
-South Dakota,52000,"$50,000-$55,000"
-Tennessee,47400,"$45,000-$50,000"
-Texas,55000,"$50,000-$55,000"
-Utah,63500,"$60,000-$65,000"
-Vermont,58000,"$55,000-$60,000"
-Virginia,66000,"$65,000-$70,000"
-Washington,64000,"$60,000-$65,000"
-West Virginia,42400,"< $45,000"
-Wisconsin,55500,"$55,000-$60,000"
-Wyoming,60200,"$60,000-$65,000"
+state_name,medhhincome,cat_var
+Alabama,44700,Group 1
+Alaska,70600,Group 4
+Arizona,51000,Group 2
+Arkansas,42000,Group 1
+California,64600,Group 2
+Colorado,63500,Group 1
+Connecticut,71700,Group 2
+Delaware,61200,Group 2
+District of Columbia,75000,Group 2
+Florida,49000,Group 3
+Georgia,50601,Group 2
+Hawaii,73000,Group 1
+Idaho,49000,Group 1
+Illinois,59000,Group 1
+Indiana,50000,Group 2
+Iowa,54600,Group 1
+Kansas,54000,Group 4
+Kentucky,45000,Group 3
+Louisiana,45000,Group 1
+Maine,50400,Group 3
+Maryland,76000,Group 1
+Massachusetts,70000,Group 1
+Michigan,50300,Group 4
+Minnesota,63000,Group 1
+Mississippi,40000,Group 4
+Missouri,50000,Group 3
+Montana,50000,Group 4
+Nebraska,55000,Group 3
+Nevada,52000,Group 1
+New Hampshire,69800,Group 2
+New Jersey,72500,Group 1
+New Mexico,45000,Group 2
+New York,60400,Group 2
+North Carolina,48000,Group 2
+North Dakota,60000,Group 2
+Ohio,50500,Group 2
+Oklahoma,49000,Group 2
+Oregon,54950,Group 1
+Pennsylvania,55000,Group 3
+Rhode Island,58000,Group 4
+South Carolina,46600,Group 2
+South Dakota,52000,Group 3
+Tennessee,47400,Group 2
+Texas,55000,Group 4
+Utah,63500,Group 2
+Vermont,58000,Group 4
+Virginia,66000,Group 3
+Washington,64000,Group 4
+West Virginia,42400,Group 2
+Wisconsin,55500,Group 1
+Wyoming,60200,Group 2
