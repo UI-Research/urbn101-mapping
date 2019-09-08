@@ -72,6 +72,25 @@ A few basics:
 
 # Making a map
 
+<font color="#55b748">**Step 1:**</font> Copy and paste the following code into your script.
+
+```
+data <- read_csv("https://raw.githubusercontent.com/UI-Research/urbn101-mapping/day1/data/state_data.csv?token=AHJ7BDMLC7LYH4P2NM5A5EC5PZYCW")
+```
+
+<font color="#55b748">**Step 2:**</font> Type `View(data)` into the console.
+
+<font color="#55b748">**Step 3:**</font> Type the following code into your script.
+
+```
+states <- get_urbn_map(map = "states", sf = TRUE)
+```
+
+Type `View(states)` into the console.
+
+<font color="#55b748">**Step 4:**</font> Merge the dataset with the geographic data using `left_join()`. Make sure that the geographic data is on the left side of the join.
+
+
 
 # What are simple features?
 
