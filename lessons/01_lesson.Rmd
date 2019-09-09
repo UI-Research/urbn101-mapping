@@ -52,6 +52,12 @@ A few basics:
 * R packages
 * R projects
 
+# Getting Started with Mapping
+
+* When should you map? (When [shouldn't](https://twitter.com/TerribleMaps) you map?)
+* Common types of maps: choropleth, dot density, heat maps...
+* Maps are 2D representations of 3D objects- there is always some [distortion](https://www.youtube.com/watch?v=vVX-PrBRtTY)
+
 # Exercise 0
 
 <font color="#55b748">**Step 1:**</font> Create a new directory called `mapping`
