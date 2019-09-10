@@ -1577,7 +1577,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Day 2: Working with Spatial Data</h1>
 <h4 class="author">Ajjit Narayanan</h4>
-<h4 class="date">September 05, 2019 19:35</h4>
+<h4 class="date">September 10, 2019 11:25</h4>
 
 </div>
 
@@ -1616,10 +1616,10 @@ set_urbn_defaults(style = &#39;map&#39;)</code></pre>
 <li><p>Shapefiles (.shp)</p></li>
 </ul>
 <p>the <code>sf</code> package has a function called <code>st_read()</code> that makes reading in any of these types of files easy.</p>
-<p><font color="#55b748"> For GeoJSONs and Shapefiles:</font></p>
+<p><font color="#ec008b"> For GeoJSONs and Shapefiles:</font></p>
 <pre class="r"><code>data = st_read(&quot;path/to/geojson/file.geojson&quot;)
 data = st_read(&quot;path/to/shp/file.shp&quot;)</code></pre>
-<p><font color="#55b748"> For CSV’s:</font></p>
+<p><font color="#ec008b"> For CSV’s:</font></p>
 <pre class="r"><code>#You have two options!
 #1- Read in the file using st_read, but maniupulate some GDAL options
 data = st_read(&quot;path/to/csv/file.csv&quot;, 
@@ -1628,6 +1628,7 @@ data = st_read(&quot;path/to/csv/file.csv&quot;,
 #2- Read in the file as a data frame and convert it to an sf object
 data = read_csv(&quot;path/to/csv/file.csv&quot;)
 data = st_as_sf(data, coords = c(&quot;lon&quot;, &quot;lat&quot;))</code></pre>
+<p><strong>NOTE: X = Longitude &amp; Y = Latitude.</strong> You will at some point mix these two up, but try to keep them straight.</p>
 <p><code>st_read</code> can also accept URL’s!</p>
 <pre class="r"><code>data = st_read(&quot;https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson&quot;)</code></pre>
 <pre><code>## Reading layer `287eaa2ecbff4d699762bbc6795ffdca_9&#39; from data source `https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson&#39; using driver `GeoJSON&#39;
@@ -1637,31 +1638,37 @@ data = st_as_sf(data, coords = c(&quot;lon&quot;, &quot;lat&quot;))</code></pre>
 ## bbox:           xmin: -77.11113 ymin: 38.81718 xmax: -76.91108 ymax: 38.98811
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
-<p>Notice that it figured out what filetype it was and what kind of point/polygon data it was.</p>
+<p>Notice that it figured out what filetype it was and what kind of spatial data it was.</p>
 <div id="exercise-1-create-a-project" class="section level2">
 <h2><span class="header-section-number">2.1</span> Exercise 1: Create a Project</h2>
 <p><font color="#55b748"><strong>Step 1:</strong></font> Create a new directory called <code>mapping101</code></p>
 <p><font color="#55b748"><strong>Step 2:</strong></font> Open RStudio. Click “Project: (None)” in the top right corner. Click “New Project” and create a project based on the existing ’mapping101` directory.</p>
 <p><font color="#55b748"><strong>Step 3:</strong></font> Open a <code>.R</code> script with the button in the top left. Save the script as <code>01_data-import-export.R</code>.</p>
-<p><font color="#55b748"><strong>Step 4:</strong></font> ’library<code>the following packages into your R session:</code>sf<code>,</code>tidyverse<code>,</code>urbnthemes<code>,</code>urbnmapr`</p>
+<p><font color="#55b748"><strong>Step 4:</strong></font> <code>library()</code> the following packages into your R session: <code>sf</code>, <code>tidyverse</code>, <code>urbnthemes</code>, <code>urbnmapr</code></p>
 </div>
 <div id="exercise-2-read-in-a-geojson" class="section level2">
 <h2><span class="header-section-number">2.2</span> Exercise 2: Read in a GeoJSON</h2>
-<p><font color="#55b748"><strong>Step 1:</strong></font> Using <code>st_read</code>, read in a GeoJSON file from the following URL: <a href="https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson" class="uri">https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson</a></p>
-<p>This is a datset of all the locations of all public parks and recreation areas in DC.</p>
+<p><font color="#55b748"><strong>Step 1:</strong></font> Read in data on the locations of all fire stations in DC. Create a variable named <code>fire_stations</code> and using <code>st_read</code>, read in the following GeoJSON from this URL: <a href="https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&amp;outFields=NAME,ADDRESS,TRUCK,AMBULANCE&amp;outSR=4326&amp;f=geojson" class="uri">https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&amp;outFields=NAME,ADDRESS,TRUCK,AMBULANCE&amp;outSR=4326&amp;f=geojson</a></p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> Type in <code>fire_stations</code> into your console and press enter. What does this SF dataframe look like? F</p>
+</div>
+<div id="exercise-3-read-in-a-csv" class="section level2">
+<h2><span class="header-section-number">2.3</span> Exercise 3: Read in a CSV</h2>
+<p><font color="#55b748"><strong>Step 1:</strong></font> Copy and paste the following link into your browser to download the CSV to you computer. It’s a dataset on all crimes in DC within the last 30 days. <a href="https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.csv" class="uri">https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.csv</a></p>
+<p><font color="#55b748"><strong>Step 1:</strong></font> Create a folder called data in your mapping101 folder, and move the downloaded CSV into that folder</p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> Find the filepath to the CSV (it should be something like ‘data/example.csv’) and read it into R as an sf dataframe named <code>crime_30</code>. Note: You may need to open the CSV to see what the X and Y columns are labelled as. You can use any of the two methods described above</p>
 </div>
 </div>
 <div id="writing-out-spatial-data" class="section level1">
 <h1><span class="header-section-number">3</span> Writing out spatial data</h1>
-<p>sf has a function called <code>st_write</code> that can write out sf objects as GeoJSON’s, shapefiles, CSVS, Geopackages, or any other spatial file format your heart desires. We recommend saving your spatial files as GeoJSON’s whenever you can for for a few reasons:</p>
+<p>sf has a function called <code>st_write</code> that can write out sf objects as GeoJSON’s, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by <a href="https://gdal.org/drivers/vector/index.html">GDAL</a>. We recommend saving your spatial files as GeoJSON’s whenever you can for for a few reasons:</p>
 <ol style="list-style-type: decimal">
 <li>It’s a pretty universal file format that can easily be read back into R or other programs like ArcGIS, or Python</li>
 <li>It uses standardized projections and naming conventions, which saves you a lot of headaches down the road</li>
 </ol>
-<p><font color="#55b748"> Writing out GeoJSONs and Shapefiles: </font></p>
+<p><font color="#ec008b"> Writing out GeoJSONs and Shapefiles: </font></p>
 <pre class="r"><code>st_write(sf_data, &quot;output/path/filename.geojson&quot;)
 st_write(sf_data, &quot;output/path/filename.shp&quot;)</code></pre>
-<p><font color="#55b748"> Writing out CSV’s </font></p>
+<p><font color="#ec008b"> Writing out CSV’s </font></p>
 <p>There may be some cases when you need to write out your spatial data as a CSV and sf does let you do that, but your longitude and latitude columns will be labelled X and Y respectively. If you need to write out CSV’s we recommend writing out a WKT (Well Known Text) column instead of X and Y columns because WKT columns can be used to store polygon data, and they use more standard naming conventions that can easily be read into R or other programs. WKT columns represent the same data as X and Y columns but in a slightly different format.</p>
 <table>
 <thead>
@@ -1697,6 +1704,12 @@ st_write(sf_data, &quot;C:/Users/anarayanan/Downloads/exparkslocations.csv&quot;
 # Writing out WKT columns to CSV
 st_write(sf_data, &quot;C:/Users/anarayanan/Downloads/exparkslocations.csv&quot;, 
           layer_options = &quot;GEOMETRY=AS_WKT&quot;)</code></pre>
+<div id="exercise-4-writing-out-spatial-data" class="section level2">
+<h2><span class="header-section-number">3.1</span> Exercise 4: Writing out Spatial data</h2>
+<p><font color="#55b748"><strong>Step 1:</strong></font> Let’s say we were only interested in relatively large fire stations. Use the <code>filter()</code> function to limit the <code>fire_stations</code> dataframe to stations that have more than 5 trucks (ie <code>TRUCKS &gt; 5</code>). Call this filtered dataframe <code>big_stations</code></p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> Write out the <code>big_stations</code> dataframe as a GeoJSON into the <code>data\</code> folder we created earlier using <code>st_write()</code>. Call the file <code>big_stations.geojson</code>.</p>
+<p><font color="#55b748"><strong>Step 3:</strong></font> Write out the <code>big_stations</code> dataframe as a CSV with WKT columns into the <code>data\</code> folder we created earlier using <code>st_write()</code>. Call the file <code>big_stations_wkt.csv</code>.</p>
+</div>
 </div>
 <div id="where-can-i-find-spatial-data" class="section level1">
 <h1><span class="header-section-number">4</span> Where can I find spatial data?</h1>
@@ -1732,6 +1745,12 @@ ggplot(montco_tracts) +
 <li><p><a href="https://opendata.dc.gov/">Open Data Portals</a></p></li>
 <li></li>
 </ul>
+<div id="exercise-4-using-tigris" class="section level2">
+<h2><span class="header-section-number">4.1</span> Exercise 4: Using tigris</h2>
+<p><font color="#55b748"><strong>Step 1:</strong></font> Let’s say we were only interested in relatively large fire stations. Use the <code>filter()</code> function to limit the <code>fire_stations</code> dataframe to stations that have more than 5 trucks (ie <code>TRUCKS &gt; 5</code>). Call this filtered dataframe <code>big_stations</code></p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> Write out the <code>big_stations</code> dataframe as a GeoJSON into the <code>data\</code> folder we created earlier using <code>st_write()</code>. Call the file <code>big_stations.geojson</code>.</p>
+<p><font color="#55b748"><strong>Step 3:</strong></font> Write out the <code>big_stations</code> dataframe as a CSV with WKT columns into the <code>data\</code> folder we created earlier using <code>st_write()</code>. Call the file <code>big_stations_wkt.csv</code>.</p>
+</div>
 </div>
 
 
