@@ -194,7 +194,7 @@ The `tigris` package in R is a great place to start looking. `tigris` provides s
 
 It provides powerful functionality by allowing you to filter to specific states, counties, or tracts. Say for example I wanted data on all block groups in DC
 
-```{r, fig.width=3, fig.height =3, eval = T}
+```{r, fig.width=3, fig.height =3, eval = T, message = F, warning = F}
 dc = tigris::block_groups(state = "DC", 
                           year = 2017, 
                           class = "sf",
@@ -225,22 +225,13 @@ Below are some other common places to find spatial data
 
 * [Open Data Portals](https://opendata.dc.gov/)
 
-* 
+* [IPUMS NHGIS]()
 
 
 
 
 ## Exercise 4: Using tigris
-<font color="#55b748">**Step 1:**</font> Let's say we were only interested in relatively large fire stations. Use the `filter()` function to limit the `fire_stations` dataframe to stations that have more than 5 trucks (ie `TRUCKS > 5`). Call this filtered dataframe `big_stations`
-
-<font color="#55b748">**Step 2:**</font> Write out the `big_stations` dataframe as a GeoJSON into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations.geojson`.
-
-
-<font color="#55b748">**Step 3:**</font> Write out the `big_stations` dataframe as a CSV with WKT columns into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations_wkt.csv`.
-
-
-
-
+<font color="#55b748">**Step 1:**</font> Let's 
 
 
 
