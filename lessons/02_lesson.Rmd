@@ -11,8 +11,8 @@ output:
     toc_float: TRUE
     css: ../www/web_report.css
     editor_options:
-      chunk_output_type: console
----
+    
+    
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
@@ -20,7 +20,8 @@ output:
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
 
-<!-- ![](../www/images/urban-institute-logo.png) -->
+![](../www/images/urban-institute-logo.png)
+
 
 
 ```{r rmarkdown-setup, echo = FALSE}
@@ -31,8 +32,6 @@ knitr::opts_chunk$set(eval = FALSE)
 knitr::opts_chunk$set(cache = TRUE)
 knitr::opts_chunk$set(fig.height = 3)
 knitr::opts_chunk$set(fig.width = 3)
-
-
 ```
 
 
@@ -48,7 +47,7 @@ library(urbnthemes)
 library(tidyverse)
 library(sf)
 library(tigris)
-set_urbn_defaults(style = 'map')
+set_urbn_defaults(style = "map")
 ```
 
 
@@ -58,9 +57,7 @@ set_urbn_defaults(style = 'map')
  Out in the wild, spatial data comes in many formats but some of the common ones you will encounter are:
 
 * CSV's with lon/lat columns
-
 * GeoJSON's (.geojson)
-
 * Shapefiles (.shp)
 
 the `sf` package has a function called `st_read()` that makes reading in any of these types of files easy.
@@ -68,31 +65,29 @@ the `sf` package has a function called `st_read()` that makes reading in any of 
 <font color="#ec008b"> For GeoJSONs and Shapefiles:</font>
 
 ```{r, eval = F}
-data = st_read("path/to/geojson/file.geojson")
-data = st_read("path/to/shp/file.shp")
+data <- st_read("path/to/geojson/file.geojson")
+data <- st_read("path/to/shp/file.shp")
 ```
 
 <font color="#ec008b"> For CSV's:</font>
 
 ```{r, eval = F}
-#You have two options!
-#1- Read in the file using st_read, but maniupulate some GDAL options
-data = st_read("path/to/csv/file.csv", 
-               options=c("X_POSSIBLE_NAMES=lon","Y_POSSIBLE_NAMES=lat"))
+# You have two options!
+# 1- Read in the file using st_read, but maniupulate some GDAL options
+data <- st_read("path/to/csv/file.csv",
+  options = c("X_POSSIBLE_NAMES=lon", "Y_POSSIBLE_NAMES=lat")
+)
 
-#2- Read in the file as a data frame and convert it to an sf object
-data = read_csv("path/to/csv/file.csv")
-data = st_as_sf(data, coords = c("lon", "lat"))
-
-
-
+# 2- Read in the file as a data frame and convert it to an sf object
+data <- read_csv("path/to/csv/file.csv")
+data <- st_as_sf(data, coords = c("lon", "lat"))
 ```
 **NOTE: X = Longitude & Y = Latitude.** You will at some point mix these two up, but try to keep them straight.
 
 `st_read` can also accept URL's!
 
 ```{r, eval = T}
-data = st_read("https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson")
+data <- st_read("https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson")
 ```
 
 Notice that it  figured out what filetype it was and what kind of spatial data it was.
@@ -138,7 +133,6 @@ sf has a function called `st_write` that can write out sf objects as GeoJSON's, 
 ```{r, eval = F}
 st_write(sf_data, "output/path/filename.geojson")
 st_write(sf_data, "output/path/filename.shp")
-
 ```
 
 
@@ -159,15 +153,14 @@ And here's how you write out CSV's both ways using `sf_write`:
 
 ```{r, eval = F}
 # Writing out X and Y columsn to CSV
-st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv", 
-          layer_options = "GEOMETRY=AS_XY")
+st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv",
+  layer_options = "GEOMETRY=AS_XY"
+)
 
 # Writing out WKT columns to CSV
-st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv", 
-          layer_options = "GEOMETRY=AS_WKT")
-
-
-
+st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv",
+  layer_options = "GEOMETRY=AS_WKT"
+)
 ```
 
 ## Exercise 4: Writing out Spatial data
@@ -194,29 +187,31 @@ The `tigris` package in R is a great place to start looking. `tigris` provides s
 It provides powerful functionality by allowing you to filter to specific states, counties, or tracts. Say for example I wanted data on all block groups in DC
 
 ```{r, fig.width=3, fig.height =3, eval = T, message = F, warning = F}
-dc = tigris::block_groups(state = "DC", 
-                          year = 2017, 
-                          class = "sf",
-                          progress_bar = FALSE)
+dc <- tigris::block_groups(
+  state = "DC",
+  year = 2017,
+  class = "sf",
+  progress_bar = FALSE
+)
 
-ggplot(dc)+
+ggplot(dc) +
   geom_sf()
-
 ```
 
 
 What about Census tracts in Montgomery County? 
 
 ```{r, eval = T}
-montco_tracts <- tracts(state = "MD", 
-                        county = "Montgomery", 
-                        class = "sf",
-                        cb = T,
-                        progress_bar = FALSE)
+montco_tracts <- tracts(
+  state = "MD",
+  county = "Montgomery",
+  class = "sf",
+  cb = T,
+  progress_bar = FALSE
+)
 
-ggplot(montco_tracts) + 
+ggplot(montco_tracts) +
   geom_sf()
-
 ```
 
 
