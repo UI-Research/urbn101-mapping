@@ -210,8 +210,8 @@ montco_tracts <- tracts(
   progress_bar = FALSE
 )
 
-ggplot(montco_tracts) +
-  geom_sf()
+ggplot() +
+  geom_sf(data = montco_tracts, mapping = aes())
 ```
 
 
