@@ -118,8 +118,7 @@ Notice that it  figured out what filetype it was and what kind of spatial data i
 <font color="#55b748">**Step 1:**</font> Copy and paste the following link into your browser to download the CSV to you computer. It's a dataset on all crimes in DC within the last 30 days.
 https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.csv
 
-<font color="#55b748">**Step 1:**</font> Create a folder called data in your mapping101 folder, and move the downloaded CSV into that folder
-
+<font color="#55b748">**Step 1:**</font> Create a folder called `data` in your mapping101 folder, and move the downloaded CSV into that folder
 
 <font color="#55b748">**Step 2:**</font> Find the filepath to the CSV (it should be something like 'data/example.csv') and read it into R as an sf dataframe named `crime_30`. Note: You may need to open the CSV to see what the X and Y columns are labelled as. You can use any of the two methods described above
 
@@ -225,17 +224,25 @@ Below are some other common places to find spatial data
 
 * [Open Data Portals](https://opendata.dc.gov/)
 
-* [IPUMS NHGIS]()
+* [IPUMS NHGIS](https://www.nhgis.org/documentation/gis-data)
 
 
 
 
-## Exercise 4: Using tigris
-<font color="#55b748">**Step 1:**</font> Let's 
+## Exercise 5: Using tigris
+<font color="#55b748">**Step 1:**</font> Use the `school_districts()` function in tigris to download all the school districts in Oregon from the year 2015. Call the variable `or_school_districts.` Make sure to set `class = "sf"`!
+
+<font color="#55b748">**Step 2:**</font> Use `ggplot()` and `geom_sf()` to make a plot of all the school districts in Oregon
 
 
+## Exercise 6: What are projections?
 
+<font color="#55b748">**Step 1:**</font> Download the zipped shapefile of Toronto's zoning boundaries from here: ftp://webftp.vancouver.ca/OpenData/shape/zoning_districts_shp.zip
 
+<font color="#55b748">**Step 2:**</font> Unzip the contents of the shapefile into the `data` folder of the `mapping101` directory.
 
+<font color="#55b748">**Step 3:**</font> Find the filepath to the `zoning_districts.shp` file in the `data` folder and read in the shapefile into R. Name the object `tor_zones`.
+
+<font color="#55b748">**Step 3:**</font> Type `tor_zones` into the column and take a look at 
 
 
