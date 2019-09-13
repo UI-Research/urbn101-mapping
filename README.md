@@ -1,6 +1,6 @@
 # urbn101-mapping
 
-There are the materials for a four class series on Mapping and Geospatial Analysis, co-hosted by the Urban Institute R Users Group and the Urban Institute Mapping Users Group.
+These are the materials for a four class series on Mapping and Geospatial Analysis, co-hosted by the Urban Institute R Users Group and the Urban Institute Mapping Users Group.
 
 
 ## Lessons
