@@ -13,10 +13,8 @@ ggplot() +
 
 
 ggplot() +
-  geom_sf(
-    data = states, mapping = aes(),
-    fill = "#1696d2", color = "white"
-  ) +
+  geom_sf(data = states, mapping = aes(),
+          fill = "#1696d2", color = "white") +
   theme_urbn_map()
 
 
@@ -24,15 +22,13 @@ ggplot() +
 
 set_urbn_defaults(style = "map")
 
-data <- read_csv("https://raw.githubusercontent.com/UI-Research/urbn101-mapping/day1/data/state_data.csv?token=AHJ7BDMLC7LYH4P2NM5A5EC5PZYCW")
+data <- read_csv("https://raw.githubusercontent.com/UI-Research/urbn101-mapping/master/data/state_data.csv?token=AHJ7BDKDASBKNTRGKVZ756C5QTRPE")
 
 geo_data <- left_join(states, data, by = "state_name")
 
 ggplot() +
-  geom_sf(
-    data = geo_data, mapping = aes(fill = medhhincome),
-    color = "white"
-  ) +
+  geom_sf(data = geo_data, mapping = aes(fill = medhhincome),
+          color = "white") +
   scale_fill_gradientn(labels = scales::dollar)
 
 
@@ -40,9 +36,7 @@ ggplot() +
 # Exercise 3 --------------------------------------------------------------
 
 ggplot() +
-  geom_sf(
-    data = geo_data, mapping = aes(fill = cat_var),
-    color = "#ffffff"
-  ) +
+  geom_sf(data = geo_data, mapping = aes(fill = cat_var),
+          color = "#ffffff") +
   scale_fill_manual(values = c("#f5cbdf", "#e54096", "#af1f6b", "#351123")) +
   labs(fill = "My categorical variable")
