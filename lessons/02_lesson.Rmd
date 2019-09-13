@@ -263,6 +263,11 @@ Below are some other common places to find spatial data
 
 <font color="#55b748">**Step 3:**</font> Find the filepath to the `zoning_districts.shp` file in the `data` folder and read in the shapefile into R. Name the object `tor_zones`.
 
-<font color="#55b748">**Step 3:**</font> Type `tor_zones` into the column and take a look at 
+<font color="#55b748">**Step 3:**</font> Type `tor_zones` into the column and take a look at the geometry column. What's wrong with those points?
+
+
+# Coordinate Reference Systems
+
+Whenever you create a map you have to make assumptions about 1) the exact 3d shape of the earth and 2) how to project that 3d shape onto a 2d surface. That's where projections or coordinate re
 
 
