@@ -6,7 +6,7 @@ output:
   html_document:
     number_sections: true
     self_contained: TRUE
-    code_folding: hide
+    code_folding: show
     toc: TRUE
     toc_float: TRUE
     css: ../www/web_report.css
@@ -14,7 +14,8 @@ output:
       chunk_output_type: console
 ---
 
-    
+  
+
 <style>
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 </style>
@@ -27,11 +28,6 @@ output:
 ```{r rmarkdown-setup, echo = FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(eval = FALSE)
-knitr::opts_chunk$set(cache = TRUE)
-knitr::opts_chunk$set(fig.height = 3)
-knitr::opts_chunk$set(fig.width = 3)
 ```
 
 
@@ -54,31 +50,33 @@ set_urbn_defaults(style = "map")
 
 # Reading in spatial data
 
- Out in the wild, spatial data comes in many formats but some of the common ones you will encounter are:
+ Out in the wild, spatial data comes in [many formats](https://geocompr.robinlovelace.net/read-write.html#file-formats) but some of the common ones you will encounter are:
 
 * CSV's with lon/lat columns
 * GeoJSON's (.geojson)
 * Shapefiles (.shp)
 
-the `sf` package has a function called `st_read()` that makes reading in any of these types of files easy.
+the `sf` package has a function called `st_read()` that makes reading in any of these types of files easy. The function takes in an argument called `dsn` or data source name
 
 <font color="#ec008b"> For GeoJSONs and Shapefiles:</font>
 
-```{r, eval = F}
-data <- st_read("path/to/geojson/file.geojson")
-data <- st_read("path/to/shp/file.shp")
+```
+data <- st_read(dsn = "path/to/geojson/file.geojson")
+data <- st_read(dsn = "path/to/shp/file.shp")
 ```
 
-<font color="#ec008b"> For CSV's:</font>
+<font color="#ec008b"> For CSV's:</font> You have two options! <br><br />
+1- Read in the file using st_read, but manipulate some GDAL options
 
-```{r, eval = F}
-# You have two options!
-# 1- Read in the file using st_read, but maniupulate some GDAL options
-data <- st_read("path/to/csv/file.csv",
+```
+data <- st_read(dsn = "path/to/csv/file.csv",
   options = c("X_POSSIBLE_NAMES=lon", "Y_POSSIBLE_NAMES=lat")
 )
+```
+2- Read in the file as a data frame and convert it to an sf object
 
-# 2- Read in the file as a data frame and convert it to an sf object
+```
+
 data <- read_csv("path/to/csv/file.csv")
 data <- st_as_sf(data, coords = c("lon", "lat"))
 ```
@@ -86,7 +84,7 @@ data <- st_as_sf(data, coords = c("lon", "lat"))
 
 `st_read` can also accept URL's!
 
-```{r, eval = T}
+```
 data <- st_read("https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson")
 ```
 
@@ -94,29 +92,44 @@ Notice that it  figured out what filetype it was and what kind of spatial data i
 
 
 
-## Exercise 0: Create a Project
+## Exercise 0: Create a Project (if you didn't do this last week)
 
 <font color="#55b748">**Step 1:**</font> Create a new directory called `mapping`
 
 <font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `mapping` directory.
 
-<font color="#55b748">**Step 3:**</font> Open a `.R` script with the button in the top left. Save the script as `01_intro-to-mapping.R`.
+<font color="#55b748">**Step 3:**</font> Submit `install.packages("tidyverse")` to the Console.
 
-<font color="#55b748">**Step 4:**</font> Submit `install.packages("tidyverse")` to the Console.
+<font color="#55b748">**Step 4:**</font> Submit `install.packages("devtools")` to the Console.
 
-<font color="#55b748">**Step 5:**</font> Submit `install.packages("devtools")` to the Console.
+<font color="#55b748">**Step 5:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
 
-<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
+<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
 
-<font color="#55b748">**Step 7:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
+<font color="#55b748">**Step 7:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
 
-<font color="#55b748">**Step 8:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
+## Exercise 0: Setup
+<font color="#55b748">**Step 1:**</font> Open a `.R` script with the button in the top left. Save the script as `02_import_export.R`.
+
+<font color="#55b748">**Step 2:**</font> Submit `install.packages("tigris")`, into the console and wait for the package to install.
+
+<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `02_import_export.R`. This loads in all the necessary libraries for today. With the cursor highlighting all the below text, click Control-Enter.
+
+```
+library(urbnmapr)
+library(urbnthemes)
+library(tidyverse)
+library(sf)
+library(tigris)
+set_urbn_defaults(style = "map")
+```
+
 
 ## Exercise 1: Read in a GeoJSON
 
 <font color="#55b748">**Step 1:**</font> Read in data on the locations of all fire stations in DC. Create a variable named `fire_stations` and using `st_read`, read in the following GeoJSON from this URL: https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson
 
-<font color="#55b748">**Step 2:**</font> Type in `fire_stations` into your console and press enter. What does this SF dataframe look like? F
+<font color="#55b748">**Step 2:**</font> Type in `fire_stations` into your console and press enter. What does this SF dataframe look like? 
 
 ## Exercise 2: Read in a CSV
 <font color="#55b748">**Step 1:**</font> Copy and paste the following link into your browser to download the CSV to your computer. It's a dataset on all crimes in DC within the last 30 days.
@@ -140,7 +153,7 @@ sf has a function called `st_write` that can write out sf objects as GeoJSON's, 
 
 <font color="#ec008b"> Writing out GeoJSONs and Shapefiles: </font>
 
-```{r, eval = F}
+```
 st_write(sf_data, "output/path/filename.geojson")
 st_write(sf_data, "output/path/filename.shp")
 ```
@@ -161,8 +174,8 @@ There may be some cases when you need to write out your spatial data as a CSV to
 
 Here's how you write out CSV's both ways using `sf_write`:
 
-```{r, eval = F}
-# Writing out X and Y columsn to CSV
+``````{r, eval = F}
+# Writing out X and Y columns to CSV
 st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv",
   layer_options = "GEOMETRY=AS_XY"
 )
@@ -173,7 +186,7 @@ st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv",
 )
 ```
 
-But sometimes, we want to write out CSVs with human readable Latitude and Longitude columns instead of X and Y columns as they are easy to mix up (quick - is X latitiude or longitude?).SF doesn't give you the ability to do this easily. So we need to extract the coordinates from the SF dataframe, append them as columns to our dataframe, then rename them latitide/longitude.
+But sometimes, we want to write out CSVs with human readable Latitude and Longitude columns instead of X and Y columns as they are easy to mix up (quick - is X latitude or longitude?).SF doesn't give you the ability to do this easily. So we need to extract the coordinates from the SF dataframe, append them as columns to our dataframe, then rename them latitude/longitude.
 
 ```{r, eval = F}
 # getting lon/lat columns from dataframe
@@ -207,7 +220,7 @@ The `tigris` package in R is a great place to start looking. `tigris` provides s
 
 * Census Tracts, Blocks, & Block Groups
 * Counties, ZCTA's, PUMA's, Places
-* congressinal districts, School Districts
+* congressional districts, School Districts
 * roads, railways, native areas, military bases
 * Lots of other data sources!
 
@@ -241,11 +254,9 @@ x = get_acs("tract", year = 2016, endyear = 2016,
 
 
 
-
 Below are some other common places to find spatial data
 
 * [Open Data Portals](https://opendata.dc.gov/)
-
 * [IPUMS NHGIS](https://www.nhgis.org/documentation/gis-data)
 
 
@@ -257,7 +268,7 @@ Below are some other common places to find spatial data
 <font color="#55b748">**Step 2:**</font> Use `ggplot()` and `geom_sf()` to make a plot of all the school districts in Oregon
 
 
-## Exercise 6: What are projections?
+## Exercise 6: What are coordinate reference systems?
 
 <font color="#55b748">**Step 1:**</font> Download the zipped shapefile of Toronto's zoning boundaries from here: ftp://webftp.vancouver.ca/OpenData/shape/zoning_districts_shp.zip
 
@@ -274,7 +285,7 @@ Whenever you create a map you have to make assumptions about 1) the exact 3d sha
 
 1) [**Geographic coordinate systems**](https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.htm): 
   - Are a 3d representation of the earth
-  - Uses spheroid/ellpisoid surface to approximate shape of the earth
+  - Uses spheroid/ellipsoid surface to approximate shape of the earth
   - Usually use decimal degree units (ie latitude/longitude) to identify locations on earth
 
 ```{r, eval = T, echo = F, out.width = 300, out.width=300}
@@ -285,15 +296,15 @@ knitr::include_graphics("../www/images/gcs_esri.png")
   - Are 2d representations of the earth
   - Is a particular geographic coordinate system + a particular *projection*
     - **projection**: mathematical formula used to convert a 3d coordinate system to a 2d flat coordinate system
-    - Many different kinds of projections, inluding Equal Area, Equidistant, Conformal
-    - All projections distort the true shape of the earth in some way. Required [xkcd comic](https://xkcd.com/977/)
-  - Usually use linear units (ie feet, meters)
+    - Many different kinds of projections, including Equal Area, Equidistant, Con formal
+    - All projections distort the true shape of the earth in some way, either in terms of shape, area, or angle. Required [xkcd comic](https://xkcd.com/977/)
+  - Usually use linear units (ie feet, meters) and therefore useful for distance based spatial operations (ie creating buffers)
 
 ![](https://media.giphy.com/media/2hagvtgbTUNuE/giphy.gif)
 
-## Finding the CRS
+## Working with CRS
 
-In `sf` there's a function called `st_crs()`. Let's use that on our `fire_stations` dataframe
+In `sf` there's a function called `st_crs()` that will tell us what the CRS of an sf dataframe is. Let's use that on our `fire_stations` dataframe
 ```{r, echo = F, eval = T, warning=F, message =F}
 fire_stations = sf::st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet =T)
 ```
@@ -302,5 +313,23 @@ fire_stations = sf::st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGI
 st_crs(fire_stations)
 ```
 
-As you can see there is an `EPSG` code and a `proj4` string, either of which can uniquely identify the CRS being used. The `EPSG` codes are usually easier to work with and are a string of 4-5 numbers that represent CRS definitions. The acronym `EPSG`, comes from the now defunct European Petrol Survey Group.
+As you can see there is an `EPSG` code and a `proj4` string, either of which can uniquely identify the CRS being used. The `EPSG` codes are usually easier to work with and are a string of 4-6 numbers that represent CRS definitions. The acronym `EPSG`, comes from the now defunct European Petrol Survey Group. Good resources for learning more about an `EPSG` code: [spatialreference.org](https://spatialreference.org/) and [epsg.io](https:://epsg.io)
+
+After you read spatial data into R, the first thing you should do is check that the CRS is specified, In most cases, `sf` should automatically detect the right CRS, but sometimes it fails and the CRS may be empty. In this case it's up to you to provide the CRS (ie the EPSG code). You can set the CRS using `st_set_crs()`. You can also transform the CRS (if the data has a non standard CRS you don't want to use) using `st_transform()`. Some tips for finding the EPSG codes of a dataset:
+
+  - For GeoJSON's, the EPSG code will always be 4326 as that is a requirement for all GeoJSON files. 
+  - For Shapefiles, you will need to open the .prj file and paste the contents into [http://prj2epsg.org](http://prj2epsg.org) to find the EPSG code
+  - For CSV's, assuming you have latitude and longitude points, it's a good bet that the EPSG code is 4326. 
+  
+  
+## Exercise 7: Transforming CRS's
+
+<font color="#55b748">**Step 1:**</font> Open the zoning_districts.prj file, copy the contents and use [http://prj2epsg.org](http://prj2epsg.org) to determine the relevant `EPSG` code. 
+
+
+<font color="#55b748">**Step 2:**</font> Confirm that SF used the correct EPSG code when it read in the shapefile by using `st_crs()` on the `tor_zones` dataframe.  
+
+<font color="#55b748">**Step 3:**</font>  Use [epsg.io](https://epsg.io) to find out what the units of this CRS is. 
+
+<font color="#55b748">**Step 4:**</font> The actual coordinates of this coordinate system may look foreign to people used to lat/lons. So transform the CRS to 4326 to get latitude/longitude. 
 
