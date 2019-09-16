@@ -6,3 +6,4 @@ These are the materials for a four class series on Mapping and Geospatial Analys
 ## Lessons
 
 * [Day 1: Intro to Mapping](https://ui-research.github.io/urbn101-mapping/lessons/01_lesson.html)
+* [Day 2: Intro to Mapping](https://ui-research.github.io/urbn101-mapping/lessons/02_lesson.html)
