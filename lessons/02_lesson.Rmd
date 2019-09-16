@@ -92,29 +92,44 @@ Notice that it  figured out what filetype it was and what kind of spatial data i
 
 
 
-## Exercise 0: Create a Project
+## Exercise 0: Create a Project (if you didn't do this last week)
 
 <font color="#55b748">**Step 1:**</font> Create a new directory called `mapping`
 
 <font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `mapping` directory.
 
-<font color="#55b748">**Step 3:**</font> Open a `.R` script with the button in the top left. Save the script as `01_intro-to-mapping.R`.
+<font color="#55b748">**Step 3:**</font> Submit `install.packages("tidyverse")` to the Console.
 
-<font color="#55b748">**Step 4:**</font> Submit `install.packages("tidyverse")` to the Console.
+<font color="#55b748">**Step 4:**</font> Submit `install.packages("devtools")` to the Console.
 
-<font color="#55b748">**Step 5:**</font> Submit `install.packages("devtools")` to the Console.
+<font color="#55b748">**Step 5:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
 
-<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
+<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
 
-<font color="#55b748">**Step 7:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
+<font color="#55b748">**Step 7:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
 
-<font color="#55b748">**Step 8:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
+## Exercise 0: Setup
+<font color="#55b748">**Step 1:**</font> Open a `.R` script with the button in the top left. Save the script as `02_import_export.R`.
+
+<font color="#55b748">**Step 2:**</font> Submit `install.packages("tigris")`, into the console and wait for the package to install.
+
+<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `02_import_export.R`. This loads in all the necessary libraries for today. With the cursor highlighting all the below text, click Control-Enter.
+
+```
+library(urbnmapr)
+library(urbnthemes)
+library(tidyverse)
+library(sf)
+library(tigris)
+set_urbn_defaults(style = "map")
+```
+
 
 ## Exercise 1: Read in a GeoJSON
 
 <font color="#55b748">**Step 1:**</font> Read in data on the locations of all fire stations in DC. Create a variable named `fire_stations` and using `st_read`, read in the following GeoJSON from this URL: https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson
 
-<font color="#55b748">**Step 2:**</font> Type in `fire_stations` into your console and press enter. What does this SF dataframe look like? F
+<font color="#55b748">**Step 2:**</font> Type in `fire_stations` into your console and press enter. What does this SF dataframe look like? 
 
 ## Exercise 2: Read in a CSV
 <font color="#55b748">**Step 1:**</font> Copy and paste the following link into your browser to download the CSV to your computer. It's a dataset on all crimes in DC within the last 30 days.
@@ -316,5 +331,5 @@ After you read spatial data into R, the first thing you should do is check that 
 
 <font color="#55b748">**Step 3:**</font>  Use [epsg.io](https://epsg.io) to find out what the units of this CRS is. 
 
-<font color="#55b748">**Step 4:**</font> The actual coordinates of this coordinate system may look foreign to people used to lat/lons. So trasform the CRS to 4326 to get latitude/longitude. 
+<font color="#55b748">**Step 4:**</font> The actual coordinates of this coordinate system may look foreign to people used to lat/lons. So transform the CRS to 4326 to get latitude/longitude. 
 
