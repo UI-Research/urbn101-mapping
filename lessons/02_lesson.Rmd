@@ -119,7 +119,7 @@ Notice that it  figured out what filetype it was and what kind of spatial data i
 <font color="#55b748">**Step 2:**</font> Type in `fire_stations` into your console and press enter. What does this SF dataframe look like? F
 
 ## Exercise 2: Read in a CSV
-<font color="#55b748">**Step 1:**</font> Copy and paste the following link into your browser to download the CSV to you computer. It's a dataset on all crimes in DC within the last 30 days.
+<font color="#55b748">**Step 1:**</font> Copy and paste the following link into your browser to download the CSV to your computer. It's a dataset on all crimes in DC within the last 30 days.
 https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.csv
 
 <font color="#55b748">**Step 1:**</font> Create a folder called `data` in your mapping101 folder, and move the downloaded CSV into that folder
@@ -133,9 +133,9 @@ https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.cs
   
 sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). We recommend  saving your spatial files as GeoJSON's whenever you can for for a few reasons:
 
-  1) It's a pretty universal file format that can easily be read back into R or other programs like ArcGIS, or Python
+  1) It's a universal file format that can easily be read back into R or other programs like ArcGIS, or Python
   2) It uses standardized projections and naming conventions, which saves you a lot of headaches down the road
-  3) It's pretty lightweight file format, especially for small to medium sized spatial files
+  3) It's a lightweight file format, especially for small to medium sized spatial files
   
 
 <font color="#ec008b"> Writing out GeoJSONs and Shapefiles: </font>
@@ -226,16 +226,18 @@ ggplot(dc) +
 ```
 
 
-There's also a sister package called `tidycensus` that provides easy access to census data in addition to spatial data. Say for example you wanted data on the population counts in Montgomery County censust tracts from from the 1 year ACS:
+There's also a sister package called `tidycensus` that provides easy access to census data in addition to spatial data. Say for example you wanted data on the population counts in Montgomery County census tracts from from the 1 year ACS:
 
-```{r}
+```{r, eval = F}
 # Note you need to sign up for a free Census API key here:
-#
-api_key = ''
-x = get_acs("tract", year = 2016, endyear = 2016, state = "MD", county = "Montgomery", keep_geo_vars = TRUE)
+# http://api.census.gov/data/key_signup.html
+
+api_key = '12345678'
+x = get_acs("tract", year = 2016, endyear = 2016, 
+            state = "MD", county = "Montgomery", 
+            geometry = TRUE, key = api_key)
 
 ```
-
 
 
 
@@ -268,6 +270,37 @@ Below are some other common places to find spatial data
 
 # Coordinate Reference Systems
 
-Whenever you create a map you have to make assumptions about 1) the exact 3d shape of the earth and 2) how to project that 3d shape onto a 2d surface. That's where projections or coordinate re
+Whenever you create a map you have to make assumptions about 1) the exact 3d shape of the earth and 2) how to project that 3d shape onto a 2d surface. That's where Coordinate Reference Systems (CRS) come in! There are two kinds of Coordinate Reference Systems:
 
+1) [**Geographic coordinate systems**](https://www.ibm.com/support/knowledgecenter/en/SSGU8G_12.1.0/com.ibm.spatial.doc/ids_spat_407.htm): 
+  - Are a 3d representation of the earth
+  - Uses spheroid/ellpisoid surface to approximate shape of the earth
+  - Usually use decimal degree units (ie latitude/longitude) to identify locations on earth
+
+```{r, eval = T, echo = F, out.width = 300, out.width=300}
+knitr::include_graphics("../www/images/gcs_esri.png")
+```
+
+2) [**Projected coordinate systems**]()
+  - Are 2d representations of the earth
+  - Is a particular geographic coordinate system + a particular *projection*
+    - **projection**: mathematical formula used to convert a 3d coordinate system to a 2d flat coordinate system
+    - Many different kinds of projections, inluding Equal Area, Equidistant, Conformal
+    - All projections distort the true shape of the earth in some way. Required [xkcd comic](https://xkcd.com/977/)
+  - Usually use linear units (ie feet, meters)
+
+![](https://media.giphy.com/media/2hagvtgbTUNuE/giphy.gif)
+
+## Finding the CRS
+
+In `sf` there's a function called `st_crs()`. Let's use that on our `fire_stations` dataframe
+```{r, echo = F, eval = T, warning=F, message =F}
+fire_stations = sf::st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet =T)
+```
+ 
+```{r, eval = T}
+st_crs(fire_stations)
+```
+
+As you can see there is an `EPSG` code and a `proj4` string, either of which can uniquely identify the CRS being used. The `EPSG` codes are usually easier to work with and are a string of 4-5 numbers that represent CRS definitions. The acronym `EPSG`, comes from the now defunct European Petrol Survey Group.
 
