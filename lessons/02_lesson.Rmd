@@ -38,10 +38,10 @@ knitr::opts_chunk$set(message = FALSE)
 * sf objects are dataframes with an additional geometry column
 
 ```{r, warning=F, message=F, eval = T}
-library(urbnmapr)
-library(urbnthemes)
 library(tidyverse)
 library(sf)
+library(urbnmapr)
+library(urbnthemes)
 library(tigris)
 set_urbn_defaults(style = "map")
 ```
@@ -187,21 +187,21 @@ But sometimes, we want to write out CSVs with human readable Latitude and Longit
 
 ```{r, eval = F}
 # getting lon/lat columns from dataframe
-coords = st_coordinates(data) %>% 
+coords <- st_coordinates(data) %>% 
   as_tibble() %>% 
   dplyr::rename(lon = X, lat = Y)
 
 # appending lon/lat columns to dataframe
-data = data %>% 
+data_to_write <- data %>% 
   st_set_geometry(NULL) %>% 
   bind_cols(coords)
 
 # writing out dataframe as csv
-write_csv(data, "path/to/file.csv")
+write_csv(data_to_write, "path/to/file.csv")
 ```
 
 
-### Exercise 4: Writing out Spatial data
+### Exercise 3: Writing out Spatial data
 <font color="#55b748">**Step 1:**</font> Let's say we were only interested in relatively large fire stations. Use the `filter()` function to limit the `fire_stations` dataframe to stations that have more than 5 trucks (ie `TRUCKS > 5`). Call this filtered dataframe `big_stations`
 
 <font color="#55b748">**Step 2:**</font> Write out the `big_stations` dataframe as a GeoJSON into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations.geojson`.
@@ -242,8 +242,8 @@ There's also a sister package called `tidycensus` that provides easy access to c
 # Note you need to sign up for a free Census API key here:
 # http://api.census.gov/data/key_signup.html
 
-api_key = '12345678'
-x = get_acs("tract", year = 2016, endyear = 2016, 
+api_key <- '12345678'
+x <- get_acs("tract", year = 2016, endyear = 2016, 
             state = "MD", county = "Montgomery", 
             geometry = TRUE, key = api_key)
 
@@ -258,8 +258,7 @@ Below are some other common places to find spatial data
 
 
 
-
-### Exercise 5: Using tigris
+### Exercise 4: Using tigris
 <font color="#55b748">**Step 1:**</font> Use the `school_districts()` function in tigris to download all the school districts in Oregon from the year 2015. Call the variable `or_school_districts.` Make sure to set `class = "sf"`!
 
 <font color="#55b748">**Step 2:**</font> Use `ggplot()` and `geom_sf()` to make a plot of all the school districts in Oregon
@@ -312,11 +311,11 @@ After you read spatial data into R, the first thing you should do is check that 
   - For CSV's, assuming you have latitude and longitude points, it's a good bet that the EPSG code is 4326. 
   
   
-### Exercise 6: Working with CRS's
+### Exercise 5: Working with CRS's
 
 <font color="#55b748">**Step 1:**</font> Download the zipped shapefile of Toronto's zoning boundaries from here: ftp://webftp.vancouver.ca/OpenData/shape/zoning_districts_shp.zip
 
-<font color="#55b748">**Step 2:**</font> Unzip the contents of the shapefile into the `data` folder of the `mapping101` directory.
+<font color="#55b748">**Step 2:**</font> Unzip the contents of the shapefile into the `data` folder of the `mapping` directory.
 
 <font color="#55b748">**Step 3:**</font> Find the filepath to the `zoning_districts.shp` file in the `data` folder and read the shapefile into R. Name the object `tor_zones`.
 
