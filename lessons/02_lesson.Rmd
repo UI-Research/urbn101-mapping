@@ -38,10 +38,10 @@ knitr::opts_chunk$set(message = FALSE)
 * sf objects are dataframes with an additional geometry column
 
 ```{r, warning=F, message=F, eval = T}
-library(urbnmapr)
-library(urbnthemes)
 library(tidyverse)
 library(sf)
+library(urbnmapr)
+library(urbnthemes)
 library(tigris)
 set_urbn_defaults(style = "map")
 ```
@@ -141,12 +141,24 @@ https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.cs
 
 # Writing out spatial data 
   
-sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). We recommend  saving your spatial files as GeoJSON's whenever you can for for a few reasons:
+sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). Shapefiles have been the defacto standard used by spatial developers and GIS professionsal for the past 20+ years, but they have some serious problems:
 
-  1) It's a universal file format that can easily be read back into R or other programs like ArcGIS, or Python
-  2) It uses standardized projections and naming conventions, which saves you a lot of headaches down the road
-  3) It's a lightweight file format, especially for small to medium sized spatial files
+  1) A shapefile is composed of atleast 3 files, making data transfer tricky
+  2) Their file size is limited to 2 GB
+  3) It's a closed source propietary ESRI file format (though drivers to read/write shapefiles have been open sourced)
+  4) Column names are limited to 10 characters
   
+We highly recommend saving your spatial files as GeoJSON's for for a few reasons:
+
+  1) It's an open source file format that can easily be read back into R, ArcGIS, or Python
+  2) It uses standardized projections and naming conventions, which saves you a lot of headaches down the road
+  3) It's a lightweight single file, makes it easy to transfer small to medium sized files
+  4) It doesn't have any file size limitations! Though if you have really large spatial files, you should look into geopackages
+  
+![](https://imgflip.com/i/3b1jj0)
+
+
+Here is how you would write out different file formats using `sf`
 
 <font color="#ec008b"> Writing out GeoJSONs and Shapefiles: </font>
 
@@ -187,21 +199,21 @@ But sometimes, we want to write out CSVs with human readable Latitude and Longit
 
 ```{r, eval = F}
 # getting lon/lat columns from dataframe
-coords = st_coordinates(data) %>% 
+coords <- st_coordinates(data) %>% 
   as_tibble() %>% 
   dplyr::rename(lon = X, lat = Y)
 
 # appending lon/lat columns to dataframe
-data = data %>% 
+data_to_write <- data %>% 
   st_set_geometry(NULL) %>% 
   bind_cols(coords)
 
 # writing out dataframe as csv
-write_csv(data, "path/to/file.csv")
+write_csv(data_to_write, "path/to/file.csv")
 ```
 
 
-### Exercise 4: Writing out Spatial data
+### Exercise 3: Writing out Spatial data
 <font color="#55b748">**Step 1:**</font> Let's say we were only interested in relatively large fire stations. Use the `filter()` function to limit the `fire_stations` dataframe to stations that have more than 5 trucks (ie `TRUCKS > 5`). Call this filtered dataframe `big_stations`
 
 <font color="#55b748">**Step 2:**</font> Write out the `big_stations` dataframe as a GeoJSON into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations.geojson`.
@@ -242,8 +254,8 @@ There's also a sister package called `tidycensus` that provides easy access to c
 # Note you need to sign up for a free Census API key here:
 # http://api.census.gov/data/key_signup.html
 
-api_key = '12345678'
-x = get_acs("tract", year = 2016, endyear = 2016, 
+api_key <- '12345678'
+x <- get_acs("tract", year = 2016, endyear = 2016, 
             state = "MD", county = "Montgomery", 
             geometry = TRUE, key = api_key)
 
@@ -258,8 +270,7 @@ Below are some other common places to find spatial data
 
 
 
-
-### Exercise 5: Using tigris
+### Exercise 4: Using tigris
 <font color="#55b748">**Step 1:**</font> Use the `school_districts()` function in tigris to download all the school districts in Oregon from the year 2015. Call the variable `or_school_districts.` Make sure to set `class = "sf"`!
 
 <font color="#55b748">**Step 2:**</font> Use `ggplot()` and `geom_sf()` to make a plot of all the school districts in Oregon
@@ -312,11 +323,11 @@ After you read spatial data into R, the first thing you should do is check that 
   - For CSV's, assuming you have latitude and longitude points, it's a good bet that the EPSG code is 4326. 
   
   
-### Exercise 6: Working with CRS's
+### Exercise 5: Working with CRS's
 
 <font color="#55b748">**Step 1:**</font> Download the zipped shapefile of Toronto's zoning boundaries from here: ftp://webftp.vancouver.ca/OpenData/shape/zoning_districts_shp.zip
 
-<font color="#55b748">**Step 2:**</font> Unzip the contents of the shapefile into the `data` folder of the `mapping101` directory.
+<font color="#55b748">**Step 2:**</font> Unzip the contents of the shapefile into the `data` folder of the `mapping` directory.
 
 <font color="#55b748">**Step 3:**</font> Find the filepath to the `zoning_districts.shp` file in the `data` folder and read the shapefile into R. Name the object `tor_zones`.
 
