@@ -155,8 +155,11 @@ We highly recommend saving your spatial files as GeoJSON's for for a few reasons
   3) It's a lightweight single file, makes it easy to transfer small to medium sized files
   4) It doesn't have any file size limitations! Though if you have really large spatial files, you should look into geopackages
   
-![](https://imgflip.com/i/3b1jj0)
+```{r, eval = T, echo = F, out.width = 600, out.width=600}
+knitr::include_graphics("../www/images/geojsons_over_shapefiles.jpg")
+```
 
+<br></br>
 
 Here is how you would write out different file formats using `sf`
 
@@ -244,7 +247,8 @@ dc_tracts <- tigris::block_groups(
 )
 
 ggplot() +
-  geom_sf(data = dc_tracts, mapping = aes())
+  geom_sf(data = dc_tracts, mapping = aes()) + 
+  theme_urbn_map()
 ```
 
 
@@ -255,10 +259,15 @@ There's also a sister package called `tidycensus` that provides easy access to c
 # http://api.census.gov/data/key_signup.html
 
 api_key <- '12345678'
-x <- get_acs("tract", year = 2016, endyear = 2016, 
-            state = "MD", county = "Montgomery", 
+md_tracts <- get_acs(geography = "tract", year = 2016, 
+            endyear = 2016, state = "MD", 
+            county = "Montgomery", variables = "B19013_001",
             geometry = TRUE, key = api_key)
 
+
+ggplot() +
+  geom_sf(data = dc_tracts, mapping = aes()) + 
+  theme_urbn_map()
 ```
 
 
