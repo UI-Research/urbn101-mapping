@@ -141,12 +141,24 @@ https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.cs
 
 # Writing out spatial data 
   
-sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). We recommend  saving your spatial files as GeoJSON's whenever you can for for a few reasons:
+sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). Shapefiles have been the defacto standard used by spatial developers and GIS professionsal for the past 20+ years, but they have some serious problems:
 
-  1) It's a universal file format that can easily be read back into R or other programs like ArcGIS, or Python
-  2) It uses standardized projections and naming conventions, which saves you a lot of headaches down the road
-  3) It's a lightweight file format, especially for small to medium sized spatial files
+  1) A shapefile is composed of atleast 3 files, making data transfer tricky
+  2) Their file size is limited to 2 GB
+  3) It's a closed source propietary ESRI file format (though drivers to read/write shapefiles have been open sourced)
+  4) Column names are limited to 10 characters
   
+We highly recommend saving your spatial files as GeoJSON's for for a few reasons:
+
+  1) It's an open source file format that can easily be read back into R, ArcGIS, or Python
+  2) It uses standardized projections and naming conventions, which saves you a lot of headaches down the road
+  3) It's a lightweight single file, makes it easy to transfer small to medium sized files
+  4) It doesn't have any file size limitations! Though if you have really large spatial files, you should look into geopackages
+  
+![](https://imgflip.com/i/3b1jj0)
+
+
+Here is how you would write out different file formats using `sf`
 
 <font color="#ec008b"> Writing out GeoJSONs and Shapefiles: </font>
 
