@@ -184,7 +184,7 @@ There may be some cases when you need to write out your spatial data as a CSV to
 |:--|
 |POINT (-76.9651, 38.89204)|
 
-Here's how you write out CSV's both ways using `sf_write`:
+Here's how you write out CSV's both ways using `st_write`:
 
 ``````{r, eval = F}
 # Writing out X and Y columns to CSV
@@ -217,7 +217,7 @@ write_csv(data_to_write, "path/to/file.csv")
 
 
 ### Exercise 3: Writing out Spatial data
-<font color="#55b748">**Step 1:**</font> Let's say we were only interested in relatively large fire stations. Use the `filter()` function to limit the `fire_stations` dataframe to stations that have more than 5 trucks (ie `TRUCKS > 5`). Call this filtered dataframe `big_stations`
+<font color="#55b748">**Step 1:**</font> Let's say we were only interested in relatively large fire stations. Use the `filter()` function to limit the `fire_stations` dataframe to stations that have more than 5 trucks (ie `TRUCK > 5`). Call this filtered dataframe `big_stations`
 
 <font color="#55b748">**Step 2:**</font> Write out the `big_stations` dataframe as a GeoJSON into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations.geojson`.
 
