@@ -1,0 +1,91 @@
+---
+title: "Day 3: Spatial Operations"
+author: "Sarah Strochak"
+date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
+output:
+  html_document:
+    number_sections: FALSE
+    self_contained: TRUE
+    code_folding: show
+    toc: TRUE
+    toc_float: TRUE
+    css: ../www/web_report.css
+    editor_options:
+      chunk_output_type: console
+---
+
+  
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+</style>
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
+
+![](../www/images/urban-institute-logo.png)
+
+
+```{r rmarkdown-setup, echo = FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+# Review 
+
+* Use GeoJSON's whenever possible!
+* Use `st_read()` and `st_write()` to read/write out spatial files
+* Be careful about Coordinate Reference Systems!
+* Use the `tigris` and `tidycensus` packages to easily obtain spatial data
+
+```{r, warning=F, message=F, eval = T}
+library(tidyverse)
+library(sf)
+library(urbnmapr)
+library(urbnthemes)
+library(tigris)
+set_urbn_defaults(style = "map")
+```
+
+### Exercise 0: Create a Project (if you didn't do this last week)
+
+<font color="#55b748">**Step 1:**</font> Create a new directory called `mapping`
+
+<font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `mapping` directory.
+
+<font color="#55b748">**Step 3:**</font> Submit `install.packages("tidyverse")` to the Console.
+
+<font color="#55b748">**Step 4:**</font> Submit `install.packages("devtools")` to the Console.
+
+<font color="#55b748">**Step 5:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
+
+<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
+
+<font color="#55b748">**Step 7:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
+
+### Exercise 0.5: Setup
+<font color="#55b748">**Step 1:**</font> Open a `.R` script with the button in the top left. Save the script as `03_spatial_operations.R`.
+
+<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `03_spatial_operations.R`. This loads in all the necessary libraries for today. With the cursor highlighting all the below text, click Control-Enter.
+
+```
+library(urbnmapr)
+library(urbnthemes)
+library(tidyverse)
+library(sf)
+```
+
+
+# Spatial Joins
+
+# Non Spatial Joins
+
+# Spatial Subsetting (cropping/clipping)
+
+# Creating Buffers
+
+# Calculating Distance
+
+# Geocoding
+
+
