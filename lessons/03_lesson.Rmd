@@ -68,17 +68,75 @@ set_urbn_defaults(style = "map")
 
 <font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `03_spatial_operations.R`. This loads in all the necessary libraries for today. With the cursor highlighting all the below text, click Control-Enter.
 
-```
+```{r lib}
+library(tidyverse)
 library(urbnmapr)
 library(urbnthemes)
-library(tidyverse)
 library(sf)
+library(tigris)
 ```
 
+### Exercise 1: Mapping Review
+
+<font color="#55b748">**Step 1:**</font> Read in the data for fire stations in DC.
+
+```{r read-fire-stations}
+fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson")
+```
+
+<font color="#55b748">**Step 2:**</font> Use `library(tigris)` to load census tracts for DC. Be sure to use cartographic boundaries!
+
+```{r load-tracts, message = FALSE, warning = FALSE, results = FALSE}
+
+dc_tracts <- tracts(state = "DC",
+                    year = 2017,
+                    class = "sf",
+                    cb = TRUE)
+
+```
+
+<font color="#55b748">**Step 3:**</font> Map the fire stations on top of the DC census tracts. Make the fire stations red!
+
+```{r map-stations}
+
+ggplot() +
+  geom_sf(data = dc_tracts, mapping = aes(),
+          fill = "grey", color = "black") +
+  geom_sf(data = fire_stations, mapping = aes(),
+          color = "red")
+
+```
 
 # Spatial Joins
 
-# Non Spatial Joins
+<font color="#ec008b"> Spatial joins </font>
+
+In non-spatial joins, like we demonstrated on day 1, you typically join two datasets on a common identifier. In spatial joins, you are instead joining on location
+
+The important thing to note for spatial joins is that the two spatial datasets that you are joining must be in the same CRS. 
+
+<font color="#55b748">**Step 1:**</font> Check the CRS of the two spatial datasets that we read in.
+
+<font color="#55b748">**Step 2:**</font> Change the CRS of `fire_stations` and `dc_tracts` to EPSG code 6487.
+
+```{r re-project}
+
+dc_tracts <- st_transform(dc_tracts, crs = 6487)
+
+fire_stations <- st_transform(fire_stations, crs = 6487)
+
+```
+
+<font color="#ec008b"> `st_join()` </font>
+
+`st_join()` is the primary function for spatial joins of `sf` objects. The basic syntax is below:
+
+```
+joined_data <- st_join(x, y, join = st_intersects())
+```
+The geometry on the **left** side of the join is the geometry that will be retained. By default, `st_join()` will perform a left join, which means only the geographies on the left hand side will be retained. You can turn this feature off with the `left = FALSE` argument.
+
+<font color="#55b748">**Step 3:**</font> Spatial join the fire stations to the census tract layers.
 
 # Spatial Subsetting (cropping/clipping)
 
