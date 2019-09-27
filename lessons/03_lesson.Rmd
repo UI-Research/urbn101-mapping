@@ -143,7 +143,7 @@ dc_stations <- st_join(dc_tracts, fire_stations, join = st_intersects)
 
 <font color="#55b748">**Step 5:**</font> Do another spatial join, but this time with the fire_stations on the left side. Plot the results. What changed?
 
-<font color="#55b748">**Step 5:**</font> Count the number of fire stations per census tract. Map this variable in a choropleth map.
+<font color="#55b748">**Step 6:**</font> Count the number of fire stations per census tract. Map this variable in a choropleth map.
 
 ```{r station-choropleth}
 
@@ -160,11 +160,47 @@ dc_stations %>%
 
 ```
 
+# Creating Buffers
+
+When we are working with spatial data, we sometimes want to create buffers around certain geographies. For instance, maybe you want to find all the houses that are within half a mile from a bus station. `st_buffer()` is a helpful function for creating buffers around points, lines or polygons.
+
+`library(units)` is helpful for converting between different units of distance.
+
+### Exercise 3: Buffers
+
+<font color="#55b748">**Step 1:**</font> Play around with units! Assign an object in your global environment for whatever distance you would like.
+
+```{r units}
+
+buffer_distance <- units::set_units(.5, "mile")
+
+```
+
+<font color="#55b748">**Step 2:**</font> Convert that distance into meters.
+
+```{r convert-units}
+
+buffer_distance <- buffer_distance %>% 
+  units::set_units("meters")
+
+```
+
+<font color="#55b748">**Step 3:**</font> Create a buffer of `buffer_distance` around the fire stations.
+
+```{r buffer}
+
+buffer_stations <- st_buffer(fire_stations, dist = buffer_distance)
+
+```
+
+<font color="#55b748">**Step 4:**</font> Plot the results. **Hint:** use the `alpha = ` options in `geom_sf()` to add transparency and see where the buffers overlap!
+
+
 # Aggregation
 
 Sometimes, we want to take smaller geographies and group them into larger geographies. We can do this using the same `dplyr` tools that we use to combine larger data: `group_by()` and `summarize()`. 
 
-### Exercise 3: Aggregation
+### Exercise 4: Aggregation
 
 <font color="#55b748">**Step 1:**</font> Use `urbnmapr` to load the `sf` dataframe of the United States.
 
@@ -203,48 +239,5 @@ ggplot() +
   geom_sf(data = regions, mapping = aes(fill = region))
 
 ```
-
-# Creating Buffers
-
-When we are working with spatial data, we sometimes want to create buffers around certain geographies. For instance, maybe you want to find all the houses that are within half a mile from a bus station. `st_buffer()` is a helpful function for creating buffers around points, lines or polygons.
-
-`library(units)` is helpful for converting between different units of distance.
-
-<font color="#55b748">**Step 1:**</font> Play around with units! Assign an object in your global environment for whatever distance you would like.
-
-```{r units}
-
-buffer_distance <- units::set_units(.5, "mile")
-
-```
-
-<font color="#55b748">**Step 2:**</font> Convert that distance into meters.
-
-```{r convert-units}
-
-buffer_distance <- buffer_distance %>% 
-  units::set_units("meters")
-
-```
-
-<font color="#55b748">**Step 3:**</font> Create a buffer of `buffer_distance` around the fire stations.
-
-```{r buffer}
-
-buffer_stations <- st_buffer(fire_stations, dist = buffer_distance)
-
-```
-
-<font color="#55b748">**Step 4:**</font> Plot the results. **Hint:** use the `alpha = ` options in `geom_sf()` to add transparency and see where the buffers overlap!
-
-
-
-
-
-# Spatial Subsetting (cropping/clipping)
-
-# Calculating Distance
-
-# Geocoding
 
 
