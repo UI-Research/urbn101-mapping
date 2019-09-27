@@ -1627,7 +1627,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Day 3: Spatial Operations</h1>
 <h4 class="author">Sarah Strochak</h4>
-<h4 class="date">September 27, 2019 11:43</h4>
+<h4 class="date">September 27, 2019 11:49</h4>
 
 </div>
 
@@ -1701,7 +1701,7 @@ set_urbn_defaults(style = &quot;map&quot;)</code></pre>
 <div id="spatial-joins" class="section level1">
 <h1>Spatial Joins</h1>
 <p><font color="#ec008b"> Spatial joins </font></p>
-<p>In non-spatial joins, like we demonstrated on day 1, you typically join two datasets on a common identifier. In spatial joins, you are instead joining on location</p>
+<p>In non-spatial joins, like we demonstrated on day 1, you typically join two datasets on a common identifier. In spatial joins, you are instead joining on location.</p>
 <p>The important thing to note for spatial joins is that the two spatial datasets that you are joining must be in the same CRS.</p>
 <div id="exercise-2-spatial-joins" class="section level3">
 <h3>Exercise 2: Spatial Joins</h3>
@@ -1713,8 +1713,8 @@ fire_stations &lt;- st_transform(fire_stations, crs = 6487)</code></pre>
 <p><font color="#ec008b"> <code>st_join()</code> </font></p>
 <p><code>st_join()</code> is the primary function for spatial joins of <code>sf</code> objects. The basic syntax is below:</p>
 <pre><code>joined_data &lt;- st_join(x, y, join = st_intersects())</code></pre>
-<p>The geometry on the <strong>left</strong> side of the join is the geometry that will be retained. By default, <code>st_join()</code> will perform a left join, which means only the geographies on the left hand side will be retained. You can turn this feature off with the <code>left = FALSE</code> argument.</p>
-<p><font color="#55b748"><strong>Step 3:</strong></font> Spatial join the fire stations to the census tract layers. Make sure to maintain the geometries of the census tract.</p>
+<p>The geometry on the <strong>left</strong> side of the join is the geometry that will be retained. By default, <code>st_join()</code> will perform a left join, which means only the observations on the left hand side will be retained. You can turn this feature off with the <code>left = FALSE</code> argument- this will result in an inner join, where only observations from the left hand side that have matches in the data from the right hand side will be kept.</p>
+<p><font color="#55b748"><strong>Step 3:</strong></font> Spatial join the fire stations to the census tract layers. Make sure to maintain the geometries of the census tracts.</p>
 <pre class="r"><code>dc_stations &lt;- st_join(dc_tracts, fire_stations, join = st_intersects)</code></pre>
 <p><font color="#55b748"><strong>Step 4:</strong></font> Compare the number of observations of <code>dc_tracts</code> and <code>dc_stations</code>. What happened?</p>
 <p><font color="#55b748"><strong>Step 5:</strong></font> Do another spatial join, but this time with the fire_stations on the left side. Plot the results. What changed?</p>
@@ -1734,7 +1734,7 @@ fire_stations &lt;- st_transform(fire_stations, crs = 6487)</code></pre>
 </div>
 <div id="creating-buffers" class="section level1">
 <h1>Creating Buffers</h1>
-<p>When we are working with spatial data, we sometimes want to create buffers around certain geographies. For instance, maybe you want to find all the houses that are within half a mile from a bus station. <code>st_buffer()</code> is a helpful function for creating buffers around points, lines or polygons.</p>
+<p>When we are working with spatial data, we sometimes want to create buffers. For instance, maybe you want to find all the houses that are within a mile of a bus station. <code>st_buffer()</code> is a helpful function for creating buffers around points, lines or polygons.</p>
 <p><code>library(units)</code> is helpful for converting between different units of distance.</p>
 <div id="exercise-3-buffers" class="section level3">
 <h3>Exercise 3: Buffers</h3>

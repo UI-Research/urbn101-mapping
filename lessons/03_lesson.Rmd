@@ -104,7 +104,7 @@ ggplot() +
 # Spatial Joins
 <font color="#ec008b"> Spatial joins </font>
 
-In non-spatial joins, like we demonstrated on day 1, you typically join two datasets on a common identifier. In spatial joins, you are instead joining on location
+In non-spatial joins, like we demonstrated on day 1, you typically join two datasets on a common identifier. In spatial joins, you are instead joining on location.
 
 The important thing to note for spatial joins is that the two spatial datasets that you are joining must be in the same CRS. 
 
@@ -129,9 +129,9 @@ fire_stations <- st_transform(fire_stations, crs = 6487)
 ```
 joined_data <- st_join(x, y, join = st_intersects())
 ```
-The geometry on the **left** side of the join is the geometry that will be retained. By default, `st_join()` will perform a left join, which means only the geographies on the left hand side will be retained. You can turn this feature off with the `left = FALSE` argument.
+The geometry on the **left** side of the join is the geometry that will be retained. By default, `st_join()` will perform a left join, which means only the observations on the left hand side will be retained. You can turn this feature off with the `left = FALSE` argument- this will result in an inner join, where only observations from the left hand side that have matches in the data from the right hand side will be kept.
 
-<font color="#55b748">**Step 3:**</font> Spatial join the fire stations to the census tract layers. Make sure to maintain the geometries of the census tract.
+<font color="#55b748">**Step 3:**</font> Spatial join the fire stations to the census tract layers. Make sure to maintain the geometries of the census tracts.
 
 ```{r first-join}
 
@@ -162,7 +162,7 @@ dc_stations %>%
 
 # Creating Buffers
 
-When we are working with spatial data, we sometimes want to create buffers around certain geographies. For instance, maybe you want to find all the houses that are within half a mile from a bus station. `st_buffer()` is a helpful function for creating buffers around points, lines or polygons.
+When we are working with spatial data, we sometimes want to create buffers. For instance, maybe you want to find all the houses that are within a mile of a bus station. `st_buffer()` is a helpful function for creating buffers around points, lines or polygons.
 
 `library(units)` is helpful for converting between different units of distance.
 
