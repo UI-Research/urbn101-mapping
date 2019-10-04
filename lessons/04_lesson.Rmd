@@ -56,7 +56,7 @@ knitr::opts_chunk$set(message = FALSE)
 ### Exercise 0.5: Setup
 <font color="#55b748">**Step 1:**</font> Open a `.R` script with the button in the top left. Save the script as `04_more_spatial_operations.R`.
 
-<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `04_more_spatial_operations.R`. This loads in all the necessary libraries for today. With the cursor highlighting all the below text, click Control-Enter.
+<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `04_more_spatial_operations.R`. This loads in all the necessary libraries and data for today. With the cursor highlighting all the below text, click Control-Enter.
 
 ```{r lib, warning = FALSE, message = FALSE, eval = TRUE}
 
@@ -78,7 +78,7 @@ dc_tracts <- tracts(state = "DC",
 dc_parks <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Recreation_WebMercator/MapServer/9/query?where=1%3D1&outFields=NAME,ADDRESS,DRINKFOUNT&outSR=4326&f=json", quiet = TRUE) %>% 
   st_transform(crs = 6487)
 
-fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson") %>% 
+fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet = TRUE) %>% 
   st_transform(crs = 6487)
 
 
@@ -93,14 +93,18 @@ Last week, we covered spatial joins between points and polygons. But what about 
 
 <font color="#55b748">**Step 1:**</font> How many rows are in the `dc_parks` dataframe? Use the `nrow()` function.
 
-<font color="#55b748">**Step 2:**</font> Spatially join `dc_tracts` to `dc_parks` and set `join=st_intersects`. Call the joined data `parks_joined`. How many rows does `parks_joined` have? 
+<font color="#55b748">**Step 2:**</font> Spatially join `dc_tracts` to `dc_parks` and set `join=st_intersects`. Call the joined data `parks_joined`. How many rows does `parks_joined` have? How many rows have a NA value for NAME.y? What do these rows represent?
 
 
-<font color="#55b748">**Step 3:**</font> Spatially join `dc_tracts` to `dc_parks` and set `join=st_covered_by`. Call the joined data `parks_covered`. How many rows does `parks_joined` have? 
+<font color="#55b748">**Step 3:**</font> Spatially join `dc_tracts` to `dc_parks` and set `join=st_covered_by`. Call the joined data `parks_covered`. How many rows does `parks_joined` have? How many rows have a NA value for NAME.y? What do these rows represent?
 
 
+<font color="#55b748">**Step 4:**</font> Using the results from above, use `st_join` to find all tracts that are completely covered by a park. How many are there and what does this mean?
 
-As seen above, spatial joins  sometimes return more rows than were in the initial data. This is because some parks were located in many census tract, and each park-tract combination is returned as a row.  Let's take the example of Marvin Gaye Park
+
+Spatial joins sometimes return more rows than were in the initial data. By default will never return fewer rows than were in the initial data because spatial joins are by default *left* joins. The unmatched columns just show up as NA's after the join. You can turn this behavior off by setting `left = FALSE` in the `st_join()` function. 
+
+In Step 2, we got more rows that were in the initial data because some parks were located in many census tracts, and each park-tract combination is returned as a row.  Let's take the example of Marvin Gaye Park to see whats happening.
 
 ```{r}
 marvin_gaye_park_joined = st_join(dc_parks %>% filter(NAME == "Marvin Gaye Park"), 
@@ -118,7 +122,7 @@ ggplot()+
 
 # Calculating Proportions
 
-With `st_join` you retain the full spatial information of the left hand side variable. So if you were to look at the shape of each of the 4 rows above, they would be the exact same. Let's see that with the `st_equals()` function which checks for equality of geometries. 
+With `st_join` you retain the full spatial information of the left hand side variable. So if you were to look at the shape of each of the 4 rows in `marvin_gaye_park_joined`, they would be the exact same. Let's see that with the `st_equals()` function which checks for equality of geometries. 
 
 ```{r}
 
@@ -155,12 +159,11 @@ ggplot(marvin_gaye_park_ints) +
 
 ### Exercise 2: Calculating proportion of all parks in all tracts
 
-<font color="#55b748">**Step 1:**</font> Using the same steps as above, calculate the proportion of all parks in all census tracts. 
+<font color="#55b748">**Step 1:**</font> Using the same steps as above, calculate the proportion of all parks in all census tracts. Store this as a dataframe called `dc_park_ints`.
 
-<font color="#55b748">**Step 2:**</font> Filter your dataset to the park named "Oxon Run Park". How many tracts does it fall into? What tract has the highest proportion of the park?
+<font color="#55b748">**Step 2:**</font> Filter `dc_park_ints` to the park named "Pope Branch Park" and call it `town_center_park_ints`. How many tracts does it fall into? What tract has the highest proportion of the park?
 
-
-<font color="#55b748">**Step 3:**</font> Make a plot of the Oxon Run Park colored in by the Census Tract the park is in.  
+<font color="#55b748">**Step 3:**</font> Make a plot of the Pope Branch Park colored in by the `GEOID` of the Census Tract each part of the park is in.  
 
 # Calculating Distances
 
@@ -169,8 +172,8 @@ Often, you will want to calculate the distance between two things - like the dis
 ```{r}
 
 ggplot()+
-  geom_sf(data = (dc_parks %>% slice(1)), fill = "green") + 
-  geom_sf(data = (fire_stations %>% slice(1:5)), fill = "red") 
+  geom_sf(data = (dc_parks %>% slice(1)), fill = "green") +
+  geom_sf(data = (fire_stations %>% slice(1:5)), color = "red") 
   
   
 dists = st_distance(dc_parks %>% slice(1), fire_stations %>% slice(1:5))
@@ -203,7 +206,7 @@ min_dists
 Now say you wanted to find the minimum distance between every park and its closest fire station: WARNING, the below code chunk may take a long time to run!
 
 ```{r}
-dists = st_distance(dc_parks ,  fire_stations)
+dists = st_distance(dc_parks, fire_stations)
 
 min_dists = dists %>% as_tibble() %>% 
   mutate(min_dist = pmap_dbl(., min)) %>% 
@@ -216,13 +219,24 @@ min_dists
 
 
 
+### st_centroid()
+This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract. 
+
+```{r}
+ggplot()+
+  geom_sf(data = dc_tracts) +
+  geom_sf(data = dc_tracts %>% st_centroid)
+```
+
+
 ### Exercise 3: Calculating Distances
 <font color="#55b748">**Step 1:**</font> Calculate the distance between the first fire station (use `slice()`) and the first 5 DC tracts.
 
 
-<font color="#55b748">**Step 2:**</font> Calculate the minimum distance between each fire station and each DC tract. Append this information to the `fire_stations` dataframe as a column named `closest_fire_station`.
+<font color="#55b748">**Step 2:**</font> Calculate the minimum distance between each fire station and each DC tract. What do these values look like? And why?
 
-<font color="#55b748">**Step 3:**</font> Make a chloropleth map of distance to fire stations for every census tract in DC. Use ggplot() and map the colors (ie the `fill=` variable) to `closest_fire_station`. 
+
+<font color="#55b748">**Step 3:**</font> Calculate the minimum distance between each fire station and *the centroid* of each DC tract. Append this information to the `fire_stations` dataframe as a column named `closest_fire_station_to_centroid`
 
 
 <font color="#55b748">**Step 4:**</font>Make a chloropleth map of distance to fire stations for every census tract centroid in DC. Use ggplot() and map the colors (ie the `fill=` variable) to `closest_fire_station_to_centroid`. 
@@ -240,19 +254,6 @@ ggplot()+
   geom_sf(data = dc_tracts) +
   geom_sf(data = dc_boundary, color = palette_urbn_cyan[4], size = 2)
 ```
-
-### st_centroid()
-This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract. 
-
-```{r}
-ggplot()+
-  geom_sf(data = dc_tracts) +
-  geom_sf(data = dc_tracts %>% st_centroid)
-```
-
-### Exercise 5: Using st_centroid()
-<font color="#55b748">**Step 1:**</font> Calculate the minimum distance between each fire station and *the centroid* of each DC tract. Append this information to the `fire_stations` dataframe as a column named `closest_fire_station_to_centroid`
-
 
 
 A really useful list of all the spatial operations available in SF can be found here:
