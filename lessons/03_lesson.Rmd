@@ -82,11 +82,12 @@ fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_D
 
 ```{r load-tracts, message = FALSE, warning = FALSE, results = FALSE}
 
-dc_tracts <- tracts(state = "DC",
-                    year = 2017,
-                    class = "sf",
-                    cb = TRUE)
-
+dc_tracts <- tracts(
+  state = "DC",
+  year = 2017,
+  class = "sf",
+  cb = TRUE
+)
 ```
 
 <font color="#55b748">**Step 3:**</font> Map the fire stations on top of the DC census tracts. Make the fire stations red!
@@ -94,11 +95,14 @@ dc_tracts <- tracts(state = "DC",
 ```{r map-stations}
 
 ggplot() +
-  geom_sf(data = dc_tracts, mapping = aes(),
-          fill = "grey", color = "black") +
-  geom_sf(data = fire_stations, mapping = aes(),
-          color = "red")
-
+  geom_sf(
+    data = dc_tracts, mapping = aes(),
+    fill = "grey", color = "black"
+  ) +
+  geom_sf(
+    data = fire_stations, mapping = aes(),
+    color = "red"
+  )
 ```
 
 # Spatial Joins
@@ -119,7 +123,6 @@ The important thing to note for spatial joins is that the two spatial datasets t
 dc_tracts <- st_transform(dc_tracts, crs = 6487)
 
 fire_stations <- st_transform(fire_stations, crs = 6487)
-
 ```
 
 <font color="#ec008b"> `st_join()` </font>
@@ -136,7 +139,6 @@ The geometry on the **left** side of the join is the geometry that will be retai
 ```{r first-join}
 
 dc_stations <- st_join(dc_tracts, fire_stations, join = st_intersects)
-
 ```
 
 <font color="#55b748">**Step 4:**</font> Compare the number of observations of `dc_tracts` and `dc_stations`. What happened?
@@ -147,17 +149,17 @@ dc_stations <- st_join(dc_tracts, fire_stations, join = st_intersects)
 
 ```{r station-choropleth}
 
-dc_stations %>% 
+dc_stations %>%
   mutate(station = ifelse(is.na(NAME.y),
-                          0,
-                          1)) %>% 
-  group_by(GEOID) %>% 
-  summarize(stations = sum(station)) %>% 
+    0,
+    1
+  )) %>%
+  group_by(GEOID) %>%
+  summarize(stations = sum(station)) %>%
   ggplot() +
   geom_sf(mapping = aes(fill = factor(stations))) +
   scale_fill_discrete() +
   labs(fill = "Fire stations per census tract")
-
 ```
 
 # Creating Buffers
@@ -173,16 +175,14 @@ When we are working with spatial data, we sometimes want to create buffers. For 
 ```{r units}
 
 buffer_distance <- units::set_units(.5, "mile")
-
 ```
 
 <font color="#55b748">**Step 2:**</font> Convert that distance into meters.
 
 ```{r convert-units}
 
-buffer_distance <- buffer_distance %>% 
+buffer_distance <- buffer_distance %>%
   units::set_units("meters")
-
 ```
 
 <font color="#55b748">**Step 3:**</font> Create a buffer of `buffer_distance` around the fire stations.
@@ -190,7 +190,6 @@ buffer_distance <- buffer_distance %>%
 ```{r buffer}
 
 buffer_stations <- st_buffer(fire_stations, dist = buffer_distance)
-
 ```
 
 <font color="#55b748">**Step 4:**</font> Plot the results. **Hint:** use the `alpha = ` options in `geom_sf()` to add transparency and see where the buffers overlap!
@@ -207,37 +206,40 @@ Sometimes, we want to take smaller geographies and group them into larger geogra
 ```{r urbnmapr}
 
 states <- get_urbn_map(map = "states", sf = TRUE)
-
 ```
 
 <font color="#55b748">**Step 2:**</font> Copy and paste the following code into your console. This will attach a census region to each state.
 
 ```{r get-regions}
 
-states <- states %>% 
+states <- states %>%
   mutate(region = case_when(
     state_abbv %in% c("ME", "RI", "CT", "NY", "NJ", "PA", "VT", "NH", "MA") ~ "Northeast",
-    state_abbv %in% c("TX", "LA", "OK", "AR", "TN", "AL", "MS", "KY", "WV",
-                      "MD", "DC", "VA", "NC", "SC", "GA", "FL", "DE") ~ "South",
-    state_abbv %in% c("ND", "SD", "NE", "KS", "MN", "IA", "MO", "WI", "IL",
-                      "IN", "MI", "OH") ~ "Midwest",
-    state_abbv %in% c("CA", "OR", "WA", "ID", "MT", "WY", "UT", "CO", "AZ", 
-                      "NM", "AK", "HI", "NV") ~ "West"
+    state_abbv %in% c(
+      "TX", "LA", "OK", "AR", "TN", "AL", "MS", "KY", "WV",
+      "MD", "DC", "VA", "NC", "SC", "GA", "FL", "DE"
+    ) ~ "South",
+    state_abbv %in% c(
+      "ND", "SD", "NE", "KS", "MN", "IA", "MO", "WI", "IL",
+      "IN", "MI", "OH"
+    ) ~ "Midwest",
+    state_abbv %in% c(
+      "CA", "OR", "WA", "ID", "MT", "WY", "UT", "CO", "AZ",
+      "NM", "AK", "HI", "NV"
+    ) ~ "West"
   ))
-
 ```
 
 <font color="#55b748">**Step 3:**</font> Use `group_by()` and `summarize()` to aggregate the state geographies into census regions.
 
 ```{r agg}
 
-regions <- states %>% 
-  group_by(region) %>% 
+regions <- states %>%
+  group_by(region) %>%
   summarize()
 
 ggplot() +
   geom_sf(data = regions, mapping = aes(fill = region))
-
 ```
 
 

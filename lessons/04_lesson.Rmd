@@ -68,21 +68,20 @@ library(tigris)
 
 set_urbn_defaults(style = "map")
 
-dc_tracts <- tracts(state = "DC",
-                    year = 2017,
-                    class = "sf",
-                    cb = TRUE,
-                    progress_bar = F) %>% 
+dc_tracts <- tracts(
+  state = "DC",
+  year = 2017,
+  class = "sf",
+  cb = TRUE,
+  progress_bar = F
+) %>%
   st_transform(crs = 6487)
 
-dc_parks <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Recreation_WebMercator/MapServer/9/query?where=1%3D1&outFields=NAME,ADDRESS,DRINKFOUNT&outSR=4326&f=json", quiet = TRUE) %>% 
+dc_parks <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Recreation_WebMercator/MapServer/9/query?where=1%3D1&outFields=NAME,ADDRESS,DRINKFOUNT&outSR=4326&f=json", quiet = TRUE) %>%
   st_transform(crs = 6487)
 
-fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet = TRUE) %>% 
+fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet = TRUE) %>%
   st_transform(crs = 6487)
-
-
-
 ```
 
 # Spatial Joins In Depth
@@ -107,16 +106,16 @@ Spatial joins sometimes return more rows than were in the initial data. By defau
 In Step 2, we got more rows that were in the initial data because some parks were located in many census tracts, and each park-tract combination is returned as a row.  Let's take the example of Marvin Gaye Park to see whats happening.
 
 ```{r}
-marvin_gaye_park_joined = st_join(dc_parks %>% filter(NAME == "Marvin Gaye Park"), 
-        dc_tracts, 
-        join = st_intersects) 
-tracts = marvin_gaye_park_joined %>% pull(GEOID)
-tracts_marvin_gaye = dc_tracts %>% filter(GEOID %in% tracts)
-  
-ggplot()+
-  geom_sf(data = tracts_marvin_gaye) + 
-  geom_sf(data = marvin_gaye_park_joined, fill = "green", col = "white") 
+marvin_gaye_park_joined <- st_join(dc_parks %>% filter(NAME == "Marvin Gaye Park"),
+  dc_tracts,
+  join = st_intersects
+)
+tracts <- marvin_gaye_park_joined %>% pull(GEOID)
+tracts_marvin_gaye <- dc_tracts %>% filter(GEOID %in% tracts)
 
+ggplot() +
+  geom_sf(data = tracts_marvin_gaye) +
+  geom_sf(data = marvin_gaye_park_joined, fill = "green", col = "white")
 ```
 
 
@@ -127,15 +126,18 @@ With `st_join` you retain the full spatial information of the left hand side var
 ```{r}
 
 st_equals(marvin_gaye_park_joined %>% slice(1),
-          marvin_gaye_park_joined %>% slice(2), 
-          sparse = F)
+  marvin_gaye_park_joined %>% slice(2),
+  sparse = F
+)
 ```
 
 You might be interested in the proportion of the park that falls within each tract for weighting purposes. For that you need to break up the park into four different polygons, each of which falls into a different tract. You can calculate that with `st_intersection()`!. 
 
 ```{r}
-park_ints = st_intersection(dc_parks %>% filter(NAME == "Marvin Gaye Park") , 
-                            dc_tracts)
+park_ints <- st_intersection(
+  dc_parks %>% filter(NAME == "Marvin Gaye Park"),
+  dc_tracts
+)
 
 ggplot(park_ints, mapping = aes(fill = GEOID)) +
   geom_sf()
@@ -145,16 +147,18 @@ So now we have four different Polygons representing the parts of the park in eac
 
 ```{r}
 
-marvin_gaye_park_ints = dc_parks %>% 
-  filter(NAME == "Marvin Gaye Park") %>% 
-  mutate(area_park = st_area(.)) %>% 
-  st_intersection(dc_tracts) %>% 
-  mutate(area_park_tract = st_area(.),
-         prop_area_tract = area_park_tract/area_park)
+marvin_gaye_park_ints <- dc_parks %>%
+  filter(NAME == "Marvin Gaye Park") %>%
+  mutate(area_park = st_area(.)) %>%
+  st_intersection(dc_tracts) %>%
+  mutate(
+    area_park_tract = st_area(.),
+    prop_area_tract = area_park_tract / area_park
+  )
 
 ggplot(marvin_gaye_park_ints) +
   geom_sf(aes(fill = as.numeric(prop_area_tract))) +
-  geom_sf(data = tracts_marvin_gaye, fill = "transparent", col = "black") 
+  geom_sf(data = tracts_marvin_gaye, fill = "transparent", col = "black")
 ```
 
 ### Exercise 2: Calculating proportion of all parks in all tracts
@@ -171,12 +175,12 @@ Often, you will want to calculate the distance between two things - like the dis
 
 ```{r}
 
-ggplot()+
+ggplot() +
   geom_sf(data = (dc_parks %>% slice(1)), fill = "green") +
-  geom_sf(data = (fire_stations %>% slice(1:5)), color = "red") 
-  
-  
-dists = st_distance(dc_parks %>% slice(1), fire_stations %>% slice(1:5))
+  geom_sf(data = (fire_stations %>% slice(1:5)), color = "red")
+
+
+dists <- st_distance(dc_parks %>% slice(1), fire_stations %>% slice(1:5))
 dists
 ```
 
@@ -184,8 +188,9 @@ As you can see there are 5 rows and 1 column, so the first argument in `st_dista
 
 
 ```{r}
-min_dists = dists %>% as_tibble() %>% 
-  mutate(min_dist = pmap_dbl(., min)) %>% #you can ignore this line for now, it just calculates the minimum of the row
+min_dists <- dists %>%
+  as_tibble() %>%
+  mutate(min_dist = pmap_dbl(., min)) %>% # you can ignore this line for now, it just calculates the minimum of the row
   select(min_dist)
 min_dists
 ```
@@ -194,10 +199,11 @@ min_dists
 Now say you wanted to do this for every park in the city:
  
 ```{r}
-dists = st_distance(dc_parks ,  fire_stations %>% slice(1:5))
+dists <- st_distance(dc_parks, fire_stations %>% slice(1:5))
 
-min_dists = dists %>% as_tibble() %>% 
-  mutate(min_dist = pmap_dbl(., min)) %>% 
+min_dists <- dists %>%
+  as_tibble() %>%
+  mutate(min_dist = pmap_dbl(., min)) %>%
   select(min_dist)
 min_dists
 ```
@@ -206,10 +212,11 @@ min_dists
 Now say you wanted to find the minimum distance between every park and its closest fire station: WARNING, the below code chunk may take a long time to run!
 
 ```{r}
-dists = st_distance(dc_parks, fire_stations)
+dists <- st_distance(dc_parks, fire_stations)
 
-min_dists = dists %>% as_tibble() %>% 
-  mutate(min_dist = pmap_dbl(., min)) %>% 
+min_dists <- dists %>%
+  as_tibble() %>%
+  mutate(min_dist = pmap_dbl(., min)) %>%
   select(min_dist)
 min_dists
 ```
@@ -223,9 +230,9 @@ min_dists
 This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract. 
 
 ```{r}
-ggplot()+
+ggplot() +
   geom_sf(data = dc_tracts) +
-  geom_sf(data = dc_tracts %>% st_centroid)
+  geom_sf(data = dc_tracts %>% st_centroid())
 ```
 
 
@@ -248,9 +255,9 @@ ggplot()+
 Sometimes, you will need to combine multiple geometries together into one geometry. Let's say for example you wanted the total boundary of DC as a signle polygon, but all you had were the individual Census Tracts for all of DC. You can use `st_union()`! But be careful because by default it returns a `sfg` object not an sf dataframe, so you need to coerce it back to an sf dataframe 
 
 ```{r}
-dc_boundary = st_union(dc_tracts) %>% st_sf()
+dc_boundary <- st_union(dc_tracts) %>% st_sf()
 
-ggplot()+
+ggplot() +
   geom_sf(data = dc_tracts) +
   geom_sf(data = dc_boundary, color = palette_urbn_cyan[4], size = 2)
 ```
@@ -262,19 +269,19 @@ A really useful list of all the spatial operations available in SF can be found 
 
 
 ```{r, include = F}
-dc_outline = st_boundary(dc_tracts)
+dc_outline <- st_boundary(dc_tracts)
 
-st_union(fire_stations) 
+st_union(fire_stations)
 
 ggplot(dc_tracts) +
-  geom_sf(fill = "transparent")+
+  geom_sf(fill = "transparent") +
   geom_sf(data = st_point_on_surface(dc_tracts))
 
 
-ggplot(st_boundary(dc_tracts) %>% slice(1))+
+ggplot(st_boundary(dc_tracts) %>% slice(1)) +
   geom_sf()
 
-ggplot((dc_tracts) %>% slice(1))+
+ggplot((dc_tracts) %>% slice(1)) +
   geom_sf()
 ```
 

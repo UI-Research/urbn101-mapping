@@ -202,13 +202,13 @@ But sometimes, we want to write out CSVs with human readable Latitude and Longit
 
 ```{r, eval = F}
 # getting lon/lat columns from dataframe
-coords <- st_coordinates(data) %>% 
-  as_tibble() %>% 
+coords <- st_coordinates(data) %>%
+  as_tibble() %>%
   dplyr::rename(lon = X, lat = Y)
 
 # appending lon/lat columns to dataframe
-data_to_write <- data %>% 
-  st_set_geometry(NULL) %>% 
+data_to_write <- data %>%
+  st_set_geometry(NULL) %>%
   bind_cols(coords)
 
 # writing out dataframe as csv
@@ -247,7 +247,7 @@ dc_tracts <- tigris::block_groups(
 )
 
 ggplot() +
-  geom_sf(data = dc_tracts, mapping = aes()) + 
+  geom_sf(data = dc_tracts, mapping = aes()) +
   theme_urbn_map()
 ```
 
@@ -258,15 +258,17 @@ There's also a sister package called `tidycensus` that provides easy access to c
 # Note you need to sign up for a free Census API key here:
 # http://api.census.gov/data/key_signup.html
 
-api_key <- '12345678'
-md_tracts <- get_acs(geography = "tract", year = 2016, 
-            endyear = 2016, state = "MD", 
-            county = "Montgomery", variables = "B19013_001",
-            geometry = TRUE, key = api_key)
+api_key <- "12345678"
+md_tracts <- get_acs(
+  geography = "tract", year = 2016,
+  endyear = 2016, state = "MD",
+  county = "Montgomery", variables = "B19013_001",
+  geometry = TRUE, key = api_key
+)
 
 
 ggplot() +
-  geom_sf(data = dc_tracts, mapping = aes()) + 
+  geom_sf(data = dc_tracts, mapping = aes()) +
   theme_urbn_map()
 ```
 
@@ -316,7 +318,7 @@ Below is a gif showing how the popular but Eurocentric Mercator projection works
 
 In `sf` there's a function called `st_crs()` that will tell us what the CRS of an sf dataframe is. Let's use that on our `fire_stations` dataframe
 ```{r, echo = F, eval = T, warning=F, message =F}
-fire_stations = sf::st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet =T)
+fire_stations <- sf::st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Public_Safety_WebMercator/MapServer/6/query?where=1%3D1&outFields=NAME,ADDRESS,TRUCK,AMBULANCE&outSR=4326&f=geojson", quiet = T)
 ```
  
 ```{r, eval = T}

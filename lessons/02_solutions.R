@@ -11,26 +11,28 @@ fire_stations <- st_read(dsn <- "https://maps2.dcgis.dc.gov/dcgis/rest/services/
 fire_stations
 
 ## Exercise 2:
-crime_30 <- st_read(dsn <- "data/crime_last_30_days.csv",
-                    options <- c("X_POSSIBLE_NAMES<-LONGITUDE", "Y_POSSIBLE_NAMES<-LATITUDE"))
+crime_30 <- st_read(
+  dsn <- "data/crime_last_30_days.csv",
+  options <- c("X_POSSIBLE_NAMES<-LONGITUDE", "Y_POSSIBLE_NAMES<-LATITUDE")
+)
 
 ## Exercise 3:
 big_stations <- fire_stations %>% filter(TRUCK > 5)
 st_write(big_stations, dsn <- "data/big_stations.geojson")
 
 coords <- st_coordinates(big_stations) %>%
-            as_tibble() %>%
-            rename(lon <- X, lat <- Y)
-big_stations_to_write <- big_stations %>% 
-                st_set_geometry(NULL) %>% 
-                bind_cols(coords)
+  as_tibble() %>%
+  rename(lon <- X, lat <- Y)
+big_stations_to_write <- big_stations %>%
+  st_set_geometry(NULL) %>%
+  bind_cols(coords)
 write_csv(big_stations_to_write, "data/big_stations.csv")
 
 
 ## Exercise 4:
 or_school_districts <- school_districts(state <- "CA", year <- 2015, class <- "sf")
 ggplot() +
-    geom_sf(data <- or_school_districts, mapping <- aes())
+  geom_sf(data <- or_school_districts, mapping <- aes())
 
 
 ## Exercise 5:
