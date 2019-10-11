@@ -12,3 +12,4 @@ These are the materials for a four class series on Mapping and Geospatial Analys
 * [Day 3: Spatial Operations Part 1](https://ui-research.github.io/urbn101-mapping/lessons/03_lesson.html)
   * [Day 3: Solutions](https://ui-research.github.io/urbn101-mapping/lessons/03_solutions.R)
 * [Day 4: Spatial Operations Part 2](https://ui-research.github.io/urbn101-mapping/lessons/04_lesson.html)
+* [Day 5: Making Pretty Maps](https://ui-research.github.io/urbn101-mapping/lessons/05_lesson.html)
