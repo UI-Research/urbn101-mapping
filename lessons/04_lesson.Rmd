@@ -271,23 +271,26 @@ You can crop an object into a rectangle by manually setting the corodinates of y
 ```{r}
 
 set_urbn_defaults(style = "print")
-dc_tracts_cropped <- st_crop(dc_tracts %>% st_transform(4326), 
-                    xmin = -77.05, xmax = -76, ymin = 38.78, ymax = 38.85)
-set_urbn_defaults(style = "map")
+dc_tracts_cropped <- st_crop(dc_tracts %>% st_transform(4326),
+  xmin = -77.05, xmax = -76, ymin = 38.78, ymax = 38.85
+)
 
+ggplot() +
+  geom_sf(data = dc_tracts_cropped)
+
+set_urbn_defaults(style = "map")
 ```
 
 
 You can also crop an object using the bounds of another smaller object. This is very useful for example if you are working with county data, and have state boundaries, but want to limit the state boundaries to the area covered by your counties. The syntax is `st_crop(x,y)`, where x is the larger geometry and y is the smaller geometry you are cropping x to.
 
 ```{r}
-one_tract = dc_tracts %>% slice(1)
+one_tract <- dc_tracts %>% slice(1)
 
-cropped_dc_tracts = st_crop(dc_tracts, one_tract) 
+cropped_dc_tracts <- st_crop(dc_tracts, one_tract)
 
-ggplot(cropped_dc_tracts) + geom_sf()
-
-
+ggplot() +
+  geom_sf(data = cropped_dc_tracts)
 ```
 
 
