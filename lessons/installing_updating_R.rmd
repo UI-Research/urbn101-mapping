@@ -1,0 +1,54 @@
+---
+title: "Installing/Updating R"
+author: "Ajjit Narayanan"
+date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
+output:
+  html_document:
+    number_sections: FALSE
+    self_contained: TRUE
+    code_folding: hide
+    toc: TRUE
+    toc_float: TRUE
+    css: ../www/web_report.css
+    editor_options:
+      chunk_output_type: console
+---
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+</style>
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
+
+![](../www/images/urban-institute-logo.png)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## When should you update?
+
+All Urban computers should come pre-installed with R and Rstudio. However your R version may be out of date and require updating. We recommend having at least R version 3.6.0 or higher. You can check what version of R you have installed by opening Rstudio and submitting the following line of code to the console: `R.Version()$version.string`.  
+
+If you're working on a personal computer, you may not have R or Rstudio installed. So follow this guide to install both on your computer. 
+
+## Updating R
+
+1) Visit https://cran.r-project.org/bin/windows/base/. The latest R version will be the downloadable link at the top. As of 1/1/2020, that R version is 3.6.2. Click on the link at the top and download the `R-x.x.x-win.exe` file. 
+2) Open the R-x.x.x-win.exe` file. Click next, accept all the defaults, and install R. After R has been installed, click the Finish button. 
+
+3) Check that your version of R has been updated in Rstudio. If Rstudio is already open, first close it. Then open Rstudio and retype in `R.Version()$version.string`. You should see an updated version number printed out on the console. 
+
+
+4) Test that R packages are loading as expected. Packages you already had installed should continue to work with newer versions of R. But in some cases, you may need to re-install the packages to work properly with new versions of R. 
+
+
+## Updating Rstudio
+Note you will need admin approval for this if you're updating Rstudio on an Urban computer. If that's the case, just head to helpdesk, tell them you're updating R studio, and ask them to provide an admin password. 
+
+
+1) Visit https://rstudio.com/products/rstudio/download/#download and download the appropriate installer for your Operating System. 
+
+2) Open the installer, accept all defaults, and install. Note you will need an admin password for this. 
+

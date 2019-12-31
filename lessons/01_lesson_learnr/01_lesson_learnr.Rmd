@@ -1,0 +1,226 @@
+---
+title: "Tutorial"
+tutorial:
+  id: "`r uuid::UUIDgenerate()`"
+  version: 0.3s
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+</style>
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato" />
+
+![](../www/images/urban-institute-logo.png)
+
+`r print(2)`
+
+```{r setup, include=FALSE}
+library(learnr)
+library(sf)
+library(tidyverse)
+library(urbnmapr)
+library(urbnthemes)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+options(scipen = 999)
+
+tutorial_options(exercise.timelimit = 90)
+states <- get_urbn_map(map = "states", sf = TRUE)
+data <- read_csv("https://raw.githubusercontent.com/UI-Research/urbn101-mapping/day1/data/state_data.csv?token=AHJ7BDMLC7LYH4P2NM5A5EC5PZYCW")
+
+```
+
+## Getting Started
+
+Why should you map in R?
+
+* **<font color="#ec008b"> Reproduciblity. </font>** Writing code provides a road map for other researchers (and future you!) on how your map was created and what analysis steps were taken. What happens if 6 months in the future, the underlying data is updated and yo uneed to recreate the map? With R, all you need to do is rerun the script
+* **<font color="#ec008b"> Iteration. </font>** Want to make the same map for 10 different years? Want to make a map of all the counties in each state? This can be as simple as adding one more line of code.
+
+* **<font color="#ec008b"> Free and open source. </font>** We are lucky and have great access to software at Urban- but outside of work, it can be expensive (financially and computationally) to use other GIS software (like ArcGIS). R and all of the relevant packages we are going ot use are completely free and open source. 
+
+* **<font color="#ec008b"> Self contained </font>** R can be used for every part of your analysis, including downloading data, trasnforming the data, making maps (and other visualizations), and creating reports. A simple R script or Rmarkdown document can contain all the steps required to recreate your your analysis and your final report.
+
+
+### FAQ's
+
+
+- What is R?
+  * A programming language for scientific computing, statistical analysis, reporting, and pretty visualizations
+
+- What is Rstudio?
+  * An IDE (Integrated Development Environment) for R. Think of R as as a car engine, and Rstudio as a sports car chassis that adds all sort of useful features
+
+- What are R projects
+  * A folder (ie working directory) on your computer that contians a `.Rproj` file. A new project should be created everytime you start a new research project. Projects are simply a way of organizing your R scripts. 
+
+- The assignment operator
+
+
+- The console and the global environment
+
+
+## Setup
+
+Before we begin with the cool stuff, we need to install a few packages. R packages are collections of R functions, data, and compiled code. R comes with a standard set of packages, and others (such as specialized ones for mapping which we'll be using) are available for download. You can install packages with the `install.packages('example_package')` function. You only need to install a package once, but you will need to load in packages every time you wish to use them in a script. A package can be loaded in by including `library(example_package)` at the top of your script.
+
+1: Modify the below code to install the `sf` package
+
+```{r install-devtools, exercise=TRUE}
+install.packages("", repos = "http://cran.us.r-project.org")
+
+```
+  
+  
+
+2: Install the `urbnthemes` and `urbnmapr` packages by copying and pasting the below lines of code.
+
+`remotes::install_github("UrbanInstitute/urbnmapr")`  
+`remotes::install_github("UrbanInstitute/urbnthemes")`
+
+```{r urbn-install, exercise = T, exercise.lines = 4}
+
+```
+
+
+3: Load in all 3 libraries. You will need to call the `library()` function three times. 
+
+
+```{r pkg_load, exercise = T, exercise.lines = 4}
+library("")
+
+```
+
+4: Now lets load in data for all US states using the `urbnmapr` package. Run the below code chunk, then add a line to view the first 5 rows of the data. You can do this by using the `head(x)` function, where x is the variable of interest
+
+```{r data_load, exercise = T}
+states <- get_urbn_map(map = "states", sf = TRUE)
+
+```
+
+## Making Maps
+
+
+To make maps, we are going to use the ggplot2 library in R. 
+
+<font color="#ec008b"> **ggplot2 syntax** </font>
+
+* <font color="#ec008b">**Data**</font> are the values represented in the visualization.
+
+* <font color="#ec008b">**Aesthetic mappings (aes)**</font> are directions for how data are mapped in a plot in a way that we can perceive. Aesthetic mappings include linking variables to the x-position, y-position, color, fill, shape, transparency, and size. 
+
+* <font color="#ec008b">**Geometric objects (geom_)**</font> are representations of the data, including points, lines, and polygons. The most common geom that we will use for mapping is `geom_sf()`. You can add on multiple geoms into a single plot
+
+This can all seem a bit confusing, so let's get started with an example
+
+### Exercise 1
+
+<font color="#55b748">**Step 1:**</font> Run the below code to generate a simple map of US states. This might take a few seconds.
+
+
+```{r simple_plot, exercise = T}
+ggplot() +
+  geom_sf(data = states, mapping = aes())
+```
+
+
+<font color="#55b748">**Step 2:**</font> What if we wanted to change the fill to be cyan and the outline of the states to be white? All you have to do is modify the `fill` and `color` parameters respectively! Try it yourself below by setting `fill = "cyan"` and `color = "white"` 
+
+```{r change_color, exercise = T}
+ggplot() +
+  geom_sf(data = states, mapping = aes(), fill = "", color = "")
+
+```
+
+Ggplot uses `+` to denote adding of layers to a map. You can add as many layers as you'd like to a map. 
+
+
+<font color="#55b748">**Step 3:**</font> Remove the gridlines and axis labels from the map by adding a `+` sign and then `theme_urbn_map()` to the end of the map.
+
+```{r rm_gridline, exercise = T}
+ggplot() +
+  geom_sf(data = states, mapping = aes(), fill = "cyan", color = "white")
+  
+```
+
+
+### Exercise 2
+
+
+<font color="#55b748">**Step 1:**</font> Run the below chucnk of code to download some data on median house prices by state. Note you can read in any CSV file from a URL intro R following the structure below. 
+
+```{r read_data, exercise = T}
+data <- read_csv("https://raw.githubusercontent.com/UI-Research/urbn101-mapping/day1/data/state_data.csv?token=AHJ7BDMLC7LYH4P2NM5A5EC5PZYCW")
+```
+
+<font color="#55b748">**Step 2:**</font> View the first 5 observations in the data to get a sense of what it looks like 
+
+```{r view_data, exercise = T}
+
+```
+
+### Exercise 
+
+*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+
+Write the R code required to add two plus two:
+
+```{r two-plus-two, exercise=TRUE}
+
+```
+
+### Exercise with Code
+
+*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+
+Now write a function that adds any two numbers and then call it:
+
+```{r add-function, exercise=TRUE, exercise.lines = 5}
+add <- function() {
+  
+}
+```
+
+## Topic 2
+
+### Exercise with Hint
+
+*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
+
+Modify the following code to limit the number of rows printed to 5:
+
+```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
+mtcars
+```
+
+```{r print-limit-hint}
+head(mtcars)
+```
+
+### Quiz
+
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+
+Some questions to verify that you understand the purposes of various base and recommended R packages:
+
+```{r quiz}
+quiz(
+  question("Which package contains functions for installing other R packages?",
+    answer("base"),
+    answer("tools"),
+    answer("utils", correct = TRUE),
+    answer("codetools")
+  ),
+  question("Which of the R packages listed below are used to create plots?",
+    answer("lattice", correct = TRUE),
+    answer("tools"),
+    answer("stats"),
+    answer("grid", correct = TRUE)
+  )
+)
+```
+
