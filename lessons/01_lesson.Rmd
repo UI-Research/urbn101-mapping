@@ -37,7 +37,7 @@ library(tidyverse)
 
 Why should you map in R?
 
-* **<font color="#ec008b"> Reproducable. </font>** Writing code provides a road map for other researchers (and future you) on how your map was created and what analysis steps were taken.
+* **<font color="#ec008b"> Reproducible. </font>** Writing code provides a road map for other researchers (and future you) on how your map was created and what analysis steps were taken.
 * **<font color="#ec008b"> Iteration. </font>** Want to make the same map for 10 different years? Want to make a map of all the counties in each state? This can be as simple as adding one more line of code.
 * **<font color="#ec008b"> Easy for analysis. </font>** There are huge benefits to using the same software to run your analysis and then make your map.
 * **<font color="#ec008b"> Free and open source. </font>** We are lucky and have great access to software at Urban- but outside of work, it can be expensive (financially and computationally) to use other GIS software.

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -1283,13 +1282,13 @@ window.initializeCodeFolding = function(show) {
   var currentIndex = 1;
 
   // select all R code blocks
-  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia');
+  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia, pre.foldable');
   rCodeBlocks.each(function() {
 
     // create a collapsable div to wrap the code in
     var div = $('<div class="collapse r-code-collapse"></div>');
-    if (show || $(this)[0].classList.contains('fold-show'))
-      div.addClass('in');
+    show = (show || $(this).hasClass('fold-show')) && !$(this).hasClass('fold-hide');
+    if (show) div.addClass('in');
     var id = 'rcode-643E0F36' + currentIndex++;
     div.attr('id', id);
     $(this).before(div);
@@ -1389,57 +1388,7 @@ h6 {
 }
 </style>
 
-<style type="text/css">.container-fluid {
-font-family: Lato;
-}
-
-h1 {
-color: #1696d2;
-}
-.navbar {
-background-color: #1696d2;
-color: #ffffff;
-font-weight: bold;
-}
-.navbar-default .navbar-brand {
-color: #FFFFFF;
-}
-.navbar-default .navbar-nav>li>a {
-color: #FFFFFF;
-}
-.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
-color: #1696d2;
-background-color: #FFFFFF;
-}
-
-.main-container {
-font-family: Lato;
-}
-
-.a {
-color: #1696d2;
-}
-
-#header {
-padding-top: 12px;
-}
-
-.list-group-item.active {
-background-color: #1696d2;
-border-color: #1696d2;
-}
-.list-group-item.active:hover {
-background-color: #000000;
-border-color: #000000;
-}
-.tocify {
-border-radius: 0;
-}
-
-.btn {
-border-radius: 0;
-}
-</style>
+<style type="text/css">.container-fluid {font-family: Lato;}h1 {color: #1696d2;}.navbar {background-color: #1696d2;color: #ffffff;font-weight: bold;}.navbar-default .navbar-brand {color: #FFFFFF;}.navbar-default .navbar-nav>li>a {color: #FFFFFF;}.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {color: #1696d2;background-color: #FFFFFF;}.main-container {font-family: Lato;}.a {color: #1696d2;}#header {padding-top: 12px;}.list-group-item.active {background-color: #1696d2;border-color: #1696d2;}.list-group-item.active:hover {background-color: #000000;border-color: #000000;}.tocify {border-radius: 0;}.btn {border-radius: 0;}</style>
 
 
 
@@ -1516,6 +1465,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -1547,6 +1497,12 @@ summary {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -1626,7 +1582,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Day 1: Let’s Make a Map in R</h1>
-<h4 class="date">September 13, 2019 10:40</h4>
+<h4 class="date">September 21, 2020 15:39</h4>
 
 </div>
 
@@ -1649,7 +1605,7 @@ library(tidyverse)</code></pre>
 <h1><span class="header-section-number">1</span> Welcome!</h1>
 <p>Why should you map in R?</p>
 <ul>
-<li><strong><font color="#ec008b"> Reproducable. </font></strong> Writing code provides a road map for other researchers (and future you) on how your map was created and what analysis steps were taken.</li>
+<li><strong><font color="#ec008b"> Reproducible. </font></strong> Writing code provides a road map for other researchers (and future you) on how your map was created and what analysis steps were taken.</li>
 <li><strong><font color="#ec008b"> Iteration. </font></strong> Want to make the same map for 10 different years? Want to make a map of all the counties in each state? This can be as simple as adding one more line of code.</li>
 <li><strong><font color="#ec008b"> Easy for analysis. </font></strong> There are huge benefits to using the same software to run your analysis and then make your map.</li>
 <li><strong><font color="#ec008b"> Free and open source. </font></strong> We are lucky and have great access to software at Urban- but outside of work, it can be expensive (financially and computationally) to use other GIS software.</li>
@@ -1807,7 +1763,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
