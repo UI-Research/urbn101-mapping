@@ -74,11 +74,11 @@ A few basics:
 
 <font color="#55b748">**Step 7:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
 
-<font color="#55b748">**Step 8:**</font> At the top of `01_intro-to-mapping.R` write:
-`library(tidyverse)`
-`library(urbnmapr)`
-`library(urbnthemes)`
-`library(ggplot2)` 
+<font color="#55b748">**Step 8:**</font> At the top of `01_intro-to-mapping.R` write: <br>
+`library(tidyverse)` <br>
+`library(urbnmapr)` <br>
+`library(urbnthemes)` <br>
+`library(ggplot2)` <br>
 
 With the cursor on the line (or selecting the text you want to run), hit Control-Enter simultaneously.
 
