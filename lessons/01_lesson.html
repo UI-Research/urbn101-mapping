@@ -1582,7 +1582,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Day 1: Let’s Make a Map in R</h1>
-<h4 class="date">September 21, 2020 16:24</h4>
+<h4 class="date">October 07, 2020 16:43</h4>
 
 </div>
 
@@ -1639,7 +1639,8 @@ library(tidyverse)</code></pre>
 <p><font color="#55b748"><strong>Step 5:</strong></font> Submit <code>install.packages(&quot;devtools&quot;)</code> to the Console.</p>
 <p><font color="#55b748"><strong>Step 6:</strong></font> Submit <code>remotes::install_github(&quot;UrbanInstitute/urbnmapr&quot;)</code> to the Console.</p>
 <p><font color="#55b748"><strong>Step 7:</strong></font> Submit <code>remotes::install_github(&quot;UrbanInstitute/urbnthemes&quot;)</code> to the Console.</p>
-<p><font color="#55b748"><strong>Step 8:</strong></font> Write <code>library(tidyverse)</code>, <code>library(urbnmapr)</code>, <code>library(urbnthemes)</code>, and <code>library(ggplot2)</code> at the top of <code>01_intro-to-mapping.R</code>. With the cursor on the line of text, click Control-Enter.</p>
+<p><font color="#55b748"><strong>Step 8:</strong></font> At the top of <code>01_intro-to-mapping.R</code> write: <code>library(tidyverse)</code> <code>library(urbnmapr)</code> <code>library(urbnthemes)</code> <code>library(ggplot2)</code></p>
+<p>With the cursor on the line (or selecting the text you want to run), hit Control-Enter simultaneously.</p>
 </div>
 <div id="exercise-1" class="section level1">
 <h1><span class="header-section-number">5</span> Exercise 1</h1>
@@ -1670,7 +1671,7 @@ library(tidyverse)</code></pre>
 <pre><code>geo_data &lt;- left_join(states, data, by = &quot;state_name&quot;)</code></pre>
 <p><font color="#55b748"><strong>Step 2:</strong></font> Use <code>ggplot()</code> to map the variable <code>medhhincome</code>. Hint: use the same code from the previous map, but move the <code>fill =</code> command to inside the <code>aes()</code>.</p>
 <p><font color="#55b748"><strong>Step 3:</strong></font> Type <code>set_urbn_defaults(style = &quot;map&quot;)</code> near the top of your script.</p>
-<p><font color="#55b748"><strong>Step 4:</strong></font> Add the line <code>scale_fill_gradient(labels = scales::dollar)</code> to the map. What changed?</p>
+<p><font color="#55b748"><strong>Step 4:</strong></font> Add the line <code>scale_fill_gradientn(labels = scales::dollar)</code> to the map. What changed?</p>
 <p><font color="#55b748"><strong>Step 5:</strong></font> Change the outline of the states to be white.</p>
 </div>
 <div id="exercise-3" class="section level1">
