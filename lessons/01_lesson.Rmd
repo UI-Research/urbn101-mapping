@@ -74,7 +74,13 @@ A few basics:
 
 <font color="#55b748">**Step 7:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
 
-<font color="#55b748">**Step 8:**</font> Write `library(tidyverse)`, `library(urbnmapr)`,  `library(urbnthemes)`, and `library(ggplot2)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
+<font color="#55b748">**Step 8:**</font> At the top of `01_intro-to-mapping.R` write:
+`library(tidyverse)`
+`library(urbnmapr)`
+`library(urbnthemes)`
+`library(ggplot2)` 
+
+With the cursor on the line (or selecting the text you want to run), hit Control-Enter simultaneously.
 
 # Exercise 1
 
@@ -130,7 +136,7 @@ geo_data <- left_join(states, data, by = "state_name")
 
 <font color="#55b748">**Step 3:**</font> Type `set_urbn_defaults(style = "map")` near the top of your script.
 
-<font color="#55b748">**Step 4:**</font> Add the line `scale_fill_gradient(labels = scales::dollar)` to the map. What changed?
+<font color="#55b748">**Step 4:**</font> Add the line `scale_fill_gradientn(labels = scales::dollar)` to the map. What changed?
 
 <font color="#55b748">**Step 5:**</font> Change the outline of the states to be white.
 
