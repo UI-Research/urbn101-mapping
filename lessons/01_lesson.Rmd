@@ -4,7 +4,7 @@ author: ""
 date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
 output:
   html_document:
-    number_sections: true
+    number_sections: FALSE
     self_contained: TRUE
     code_folding: hide
     toc: TRUE
@@ -55,6 +55,9 @@ A few basics:
 # Getting Started with Mapping
 
 * When should you map? (When [shouldn't](https://twitter.com/TerribleMaps) you map?)
+
+![](https://imgs.xkcd.com/comics/heatmap.png)
+
 * Common types of maps: choropleth, dot density, heat maps...
 * Maps are 2D representations of 3D objects- there is always some [distortion](https://www.youtube.com/watch?v=vVX-PrBRtTY)
 
@@ -68,7 +71,7 @@ A few basics:
 
 <font color="#55b748">**Step 4:**</font> Submit `install.packages("tidyverse")` to the Console.
 
-<font color="#55b748">**Step 5:**</font> Submit `install.packages("devtools")` to the Console.
+<font color="#55b748">**Step 5:**</font> Submit `install.packages("remotes")` to the Console.
 
 <font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
 
@@ -82,7 +85,8 @@ A few basics:
 
 With the cursor on the line (or selecting the text you want to run), hit Control-Enter simultaneously.
 
-# Exercise 1
+# ggplot2
+To make maps in R, we use the `ggplot2` charting library. The power of this, is that we use almost identical syntax to create both graphs and maps in R
 
 <font color="#ec008b"> **`ggplot2` syntax** </font>
 
@@ -91,6 +95,9 @@ With the cursor on the line (or selecting the text you want to run), hit Control
 * <font color="#ec008b">**2 Aesthetic mappings**</font> are directions for how data are mapped in a plot in a way that we can perceive. Aesthetic mappings include linking variables to the x-position, y-position, color, fill, shape, transparency, and size. 
 
 * <font color="#ec008b">**3 Geometric objects**</font> are representations of the data, including points, lines, and polygons. The most common geom that we will use for mapping is `geom_sf()`.
+
+
+# Exercise 1: Let's make a map
 
 <font color="#55b748">**Step 1:**</font> Type the following code into your script.
 
@@ -116,9 +123,9 @@ ggplot() +
 
 <font color="#55b748">**Step 4**</font> Remove the gridlines and axis labels from the map by adding a `+` sign and then `theme_urbn_map()` to the end of the map.
 
-# Exercise 2
+# Exercise 2: Mapping Household Median Income by State
 
-<font color="#55b748">**Step 1:**</font> Copy and paste the following code into your script.
+<font color="#55b748">**Step 1:**</font> Copy and paste the following code into your script. 
 
 ```
 data <- read_csv("https://raw.githubusercontent.com/UI-Research/urbn101-mapping/day1/data/state_data.csv?token=AHJ7BDMLC7LYH4P2NM5A5EC5PZYCW")
@@ -141,7 +148,7 @@ geo_data <- left_join(states, data, by = "state_name")
 <font color="#55b748">**Step 5:**</font> Change the outline of the states to be white.
 
 
-# Exercise 3
+# Exercise 3: Mapping Categorical Variables
 
 <font color="#55b748">**Step 1:**</font> Using the same `geo_data` dataframe, we will now map a categorical variable.
 
