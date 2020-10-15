@@ -129,19 +129,17 @@ Notice that it  figured out what filetype it was and what kind of spatial data i
 <font color="#55b748">**Step 2:**</font> Type in `fire_stations` into your console and press enter. What does this SF dataframe look like? 
 
 ### Exercise 2: Read in a CSV
-<font color="#55b748">**Step 1:**</font> Copy and paste the following link into your browser to download the CSV to your computer. It's a dataset on all crimes in DC within the last 30 days.
-https://geocoding-codestar-test.s3.us-east-2.amazonaws.com/crime_last_30_days.csv
+<font color="#55b748">**Step 1:**</font> Copy and paste the following link (https://opendata.arcgis.com/datasets/0a73011064ae4580a4a8539de03060d1_14.csv) into your browser. This will download a CSV dataset of all the public wifi hostpots in DC. 
 
-<font color="#55b748">**Step 1:**</font> Create a folder called `data` in your mapping101 folder, and move the downloaded CSV into that folder
+<font color="#55b748">**Step 2:**</font> Create a folder called `data` in your mapping101 folder, and move the downloaded CSV into that folder
 
-<font color="#55b748">**Step 2:**</font> Find the filepath to the CSV (it should be something like 'data/example.csv') and read it into R as an sf dataframe named `crime_30`. Note: You may need to open the CSV to see what the X and Y columns are labelled as. You can use any of the two methods described above
-
+<font color="#55b748">**Step 3:**</font> Find the filepath to the CSV (it should be something like 'data/example.csv') and read it into R as an sf dataframe named `hotspots`. Note: You will need to open the CSV to see what the X and Y columns are labelled as. You can use any of the two methods described above
 
 
 
 # Writing out spatial data 
   
-sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). Shapefiles have been the defacto standard used by spatial developers and GIS professionsal for the past 20+ years, but they have some serious problems:
+sf has a function called `st_write` that can write out sf objects as GeoJSON's, shapefiles, CSVS, Geopackages, or just about any other spatial format supported by [GDAL](https://gdal.org/drivers/vector/index.html). Shapefiles have been the defacto standard used by spatial developers and GIS professionals for the past 20+ years, but they have some serious problems:
 
   1) A shapefile is composed of atleast 3 files, making data transfer tricky
   2) Their file size is limited to 2 GB
@@ -188,17 +186,17 @@ Here's how you write out CSV's both ways using `st_write`:
 
 ``````{r, eval = F}
 # Writing out X and Y columns to CSV
-st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv",
+st_write(sf_data, "data/exparkslocations.csv",
   layer_options = "GEOMETRY=AS_XY"
 )
 
 # Writing out WKT columns to CSV
-st_write(sf_data, "C:/Users/anarayanan/Downloads/exparkslocations.csv",
+st_write(sf_data, "data/exparkslocations.csv",
   layer_options = "GEOMETRY=AS_WKT"
 )
 ```
 
-But sometimes, we want to write out CSVs with human readable Latitude and Longitude columns instead of X and Y columns as they are easy to mix up (quick - is X latitude or longitude?).SF doesn't give you the ability to do this easily. So we need to extract the coordinates from the SF dataframe, append them as columns to our dataframe, then rename them latitude/longitude.
+But sometimes, we want to write out CSVs with human readable Latitude and Longitude columns instead of X and Y columns as they are easy to mix up (quick - is X latitude or longitude?) . `sf` doesn't give you the ability to do this easily. So we need to extract the coordinates from the SF dataframe, append them as columns to our dataframe, then rename them latitude/longitude.
 
 ```{r, eval = F}
 # getting lon/lat columns from dataframe
@@ -219,9 +217,9 @@ write_csv(data_to_write, "path/to/file.csv")
 ### Exercise 3: Writing out Spatial data
 <font color="#55b748">**Step 1:**</font> Let's say we were only interested in relatively large fire stations. Use the `filter()` function to limit the `fire_stations` dataframe to stations that have more than 5 trucks (ie `TRUCK > 5`). Call this filtered dataframe `big_stations`
 
-<font color="#55b748">**Step 2:**</font> Write out the `big_stations` dataframe as a GeoJSON into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations.geojson`.
+<font color="#55b748">**Step 2:**</font> Write out the `big_stations` dataframe as a GeoJSON into the `data/` folder we created earlier using `st_write()`. Call the file `big_stations.geojson`.
 
-<font color="#55b748">**Step 3:**</font> Write out the `big_stations` dataframe as a CSV with lat/lon columns into the `data\` folder we created earlier using `st_write()`. Call the file `big_stations.csv`. 
+<font color="#55b748">**Step 3:**</font> Write out the `big_stations` dataframe as a CSV with lat/lon columns into the `data/` folder we created earlier using `st_write()`. Call the file `big_stations.csv`. 
 
 
 
@@ -331,7 +329,7 @@ After you read spatial data into R, the first thing you should do is check that 
 
   - For GeoJSON's, the EPSG code will always be 4326 as that is a requirement for all GeoJSON files. 
   - For Shapefiles, you will need to open the .prj file and paste the contents into [http://prj2epsg.org](http://prj2epsg.org) to find the EPSG code
-  - For CSV's, assuming you have latitude and longitude points, it's a good bet that the EPSG code is 4326. 
+    - For CSV's, assuming you have latitude and longitude points, it's a good bet that the EPSG code is 4326. But you may have to do some digging into metadata to find out exactly which crs is used.
   
   
 ### Exercise 5: Working with CRS's
