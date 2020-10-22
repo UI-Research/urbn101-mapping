@@ -40,24 +40,17 @@ knitr::opts_chunk$set(message = FALSE)
 
 ### Exercise 0: Create a Project (if you didn't do this last week)
 
-<font color="#55b748">**Step 1:**</font> Create a new directory called `mapping`
+<font color="#55b748">**Step 1:**</font> If you haven't in past weeks, create a new directory (folder) called `mapping`
 
-<font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `mapping` directory.
+<font color="#55b748">**Step 2:**</font> Open RStudio. Click "Project: (None)" in the top right corner. Click "New Project" and create a project based on the existing `mapping` directory or open your already existing mapping project.
 
-<font color="#55b748">**Step 3:**</font> Submit `install.packages("tidyverse")` to the Console.
+<font color="#55b748">**Step 3:**</font> Today we will be working with tidyverse, tigris, sf, urbnthemes, and urbnmapr, if you haven't used tidyverse/tigris/sf submit `install.packages("WHATEVER PACKAGE YOU NEED")` to the Console.  If you haven't used urbnmapr or urbnthemes first submit `install.packages("devtools")` to the Console, then submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console and/or `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console, depending on what you need to install. 
 
-<font color="#55b748">**Step 4:**</font> Submit `install.packages("devtools")` to the Console.
-
-<font color="#55b748">**Step 5:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
-
-<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
-
-<font color="#55b748">**Step 7:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
 
 ### Exercise 0.5: Setup
-<font color="#55b748">**Step 1:**</font> Open a `.R` script with the button in the top left. Save the script as `03_spatial_operations.R`.
+<font color="#55b748">**Step 1:**</font> Open a new `.R` script by clicking File>New File> R Script. Save the script as `03_spatial_operations.R`.
 
-<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `03_spatial_operations.R`. This loads in all the necessary libraries for today. With the cursor highlighting all the below text, click Control-Enter.
+<font color="#55b748">**Step 2:**</font> Copy and paste the following to the top of `03_spatial_operations.R`. This loads in all the necessary libraries for today. To run the script, highlight it and click control+enter.
 
 ```{r lib, warning = FALSE, message = FALSE, eval = TRUE}
 
