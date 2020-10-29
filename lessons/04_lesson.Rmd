@@ -47,11 +47,13 @@ knitr::opts_chunk$set(message = FALSE)
 
 <font color="#55b748">**Step 4:**</font> Submit `install.packages("devtools")` to the Console.
 
-<font color="#55b748">**Step 5:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
+<font color="#55b748">**Step 5:**</font> **Submit `install.packages("mapview")` to the Console.**
 
-<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
+<font color="#55b748">**Step 6:**</font> Submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console.
 
-<font color="#55b748">**Step 7:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
+<font color="#55b748">**Step 7:**</font> Submit `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console.
+
+<font color="#55b748">**Step 8:**</font> Write `library(tidyverse)`, `library(urbnmapr)`, and `library(urbnthemes)` at the top of `01_intro-to-mapping.R`. With the cursor on the line of text, click Control-Enter.
 
 ### Exercise 0.5: Setup
 <font color="#55b748">**Step 1:**</font> Open a `.R` script with the button in the top left. Save the script as `04_more_spatial_operations.R`.
@@ -65,6 +67,7 @@ library(sf)
 library(urbnmapr)
 library(urbnthemes)
 library(tigris)
+library(mapview)
 
 set_urbn_defaults(style = "map")
 
@@ -84,9 +87,199 @@ fire_stations <- st_read("https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_D
   st_transform(crs = 6487)
 ```
 
+
+# Interactive Maps
+One great feature for R is support for quickly and easily creating interactive maps. While we do not recommend creating interactive maps for any briefs/products that will be published (mostly because getting the styles to align with the Urban Style guide is a little difficult), interactive maps can be a great tool for exploratory data analyses and helping you understand your data. Today we are going to cover a package called `mapview` which will allow you to create interactive maps. 
+
+
+Once you have an `sf` dataframe, you can create an interactive map with just one line: `mapview(sf_dataframe)`. You can save this map by assigning it to an object. For example `map <- mapview(sf_dataframe)`
+
+Below are some of the many ways you can change the appearance of your interactive map. For more details, please see: https://r-spatial.github.io/mapview/articles/articles/mapview_01-basics.html
+
+
+* If you want to color in the tracts by a particular variable (ie make a chloropleth map), use the `zcol` argument and feed in a column name IN QUOTES. Note this is different from `ggplot` where you could use a column name without quotes
+
+* If you want to change the variable text displayed on hover, use the `label` argument and feed in a column name in QUOTES.   
+
+* If you want to change the type of basemap being used in the background, use the `map.types` argument and feed in some of the following: `"CartoDB.Positron", "CartoDB.DarkMatter", "OpenStreetMap", "Esri.WorldImagery", "OpenTopoMap"`. For a full list of basemaps, see [here](http://leaflet-extras.github.io/leaflet-providers/preview/).
+
+* If you want to change the title of the legend, you can use the `layer.name` argument and feed in the    `"title"` of your choice.
+
+* If you want to change the opacity of the colored in regeions of the map, use the `alpha.regions` argument and choose a number from `0` to `1` (like `0.3`).
+
+
+## Exercise 1
+
+<font color="#55b748">**Step 1:**</font> Make an interactive map of `dc_tracts` colored in by the `"ALAND"` variable (the area of the land covered by that tract). Call this map `dc_land`.
+
+<font color="#55b748">**Step 2:**</font> Make an interactive map of `dc_tracts` colored in by the `"ALAND"` variable (the area of the land covered by that tract). Call this map `dc_water`.
+
+<font color="#55b748">**Step 3:**</font> Now make the Census tract names display on hover. They are contained in the `"NAME"` column.
+
+
+# Adding two layers together
+
+With mapview, it's really easy to plot two `sf` dataframes together on the same map. Just like ggplot, you use the `+` operator to add two different maps on top of each other:
+
+```{r, eval = FALSE}
+mapview(sf_dataframe) +
+  mapview(another_sf_dataframe)
+```
+
+You can also use the `|` operator to create side by side slider maps!
+
+```{r, eval = FALSE}
+mapview(sf_dataframe) |
+  mapview(another_sf_dataframe)
+```
+
+
+
+## Exercise 2
+
+<font color="#55b748">**Step 1:**</font> Now plot the DC parks on top of the DC census tracts using the `+` operator. What do you see?
+
+<font color="#55b748">**Step 2:**</font> For the `dc_tracts` mapview statement, set `col.regions = "steelblue"` and for the `dc_parks` mapview staetment set `col.regions = "green"`
+
+<font color="#55b748">**Step 3:**</font> Plot the `dc_land` and `dc_water` maps side by side using the `|` operator.
+
+
+
+# Calculating Distances
+
+Often, you will want to calculate the distance between two things - like the distance between two points, or a point and a polygon. There's a handy function called `st_distance()` that does this for you! But it spits out a *matrix* instead of the dataframes we're used to seeing. This can feel scary but don't worry, we can easily coerce them into the dataframes we're use to working with. Say we wanted to get the distance between the first 5 fire stations and 1 park
+
+```{r}
+
+ggplot() +
+  geom_sf(data = (dc_parks %>% slice(1)), fill = "green") +
+  geom_sf(data = (fire_stations %>% slice(1:5)), color = "red")
+
+
+dists <- st_distance(dc_parks %>% slice(1), fire_stations %>% slice(1:5))
+dists
+```
+
+As you can see there are 5 rows and 1 column, and each column contains the distance between the park and the respective fire station.
+Keep in mind that the first argument in `st_distance` determines the number of rows and the second argument determines the number of columns. Let's say you wanted the shortest distance between this park and these 5 fire stations. That's just the minimum of the first row! But because it's a matrix, we need to do some wrangling to get to the answer.
+
+
+```{r}
+min_dists <- dists %>%
+  as_tibble() %>%
+  mutate(min_dist = pmap_dbl(., min)) %>% # This line looks complicated, but it just calculates the minimum of the row
+  select(min_dist)
+min_dists
+```
+
+
+Now say you wanted to do this for every park in the city. All we have to do is remove the `slice` operation from the `dc_parks` dataframe:
+ 
+```{r}
+dists <- st_distance(dc_parks, fire_stations %>% slice(1:5))
+
+min_dists <- dists %>%
+  as_tibble() %>%
+  mutate(min_dist = pmap_dbl(., min)) %>%
+  select(min_dist)
+min_dists
+```
+
+
+Now say you wanted to find the minimum distance between every park and its closest fire station: WARNING, the below code chunk may take a long time to run!
+
+```{r}
+dists <- st_distance(dc_parks, fire_stations)
+
+min_dists <- dists %>%
+  as_tibble() %>%
+  mutate(min_dist = pmap_dbl(., min)) %>%
+  select(min_dist)
+min_dists
+```
+
+
+`st_distance` can also be used to measure the distance between points and polygons, or polygons and polygons. Bear in mind however that it will always calculate the distance to the closest edge of the polygon! 
+
+
+
+### st_centroid()
+This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract. 
+
+```{r}
+ggplot() +
+  geom_sf(data = dc_tracts) +
+  geom_sf(data = dc_tracts %>% st_centroid())
+```
+
+
+### Exercise 3: Calculating Distances
+<font color="#55b748">**Step 1:**</font> Calculate the distance between the first fire station (use `slice()`) and the first 5 DC tracts (use `slice()` again).
+
+
+<font color="#55b748">**Step 2:**</font> Calculate the minimum distance between each fire station and each DC tract. What do these values look like? And why?
+
+
+<font color="#55b748">**Step 3:**</font> Calculate the minimum distance between each fire station and *the centroid* of each DC tract. Append this information to the `fire_stations` dataframe as a column named `closest_fire_station_to_centroid`
+
+
+<font color="#55b748">**Step 4:**</font>Make a chloropleth map of distance to fire stations for every census tract centroid in DC. Use ggplot() and map the colors (ie the `fill=` variable) to `closest_fire_station_to_centroid`. 
+
+
+# Miscellanious Spatial Operations
+
+### st_union()
+Sometimes, you will need to combine multiple geometries together into one geometry. Let's say for example you wanted the total boundary of DC as a signle polygon, but all you had were the individual Census Tracts for all of DC. You can use `st_union()`! But be careful because by default it returns a `sfg` object not an sf dataframe, so you need to coerce it back to an sf dataframe 
+
+```{r}
+dc_boundary <- st_union(dc_tracts) %>% st_sf()
+
+ggplot() +
+  geom_sf(data = dc_tracts) +
+  geom_sf(data = dc_boundary, color = palette_urbn_cyan[4], size = 2)
+```
+
+
+### st_crop()
+If you need to crop your data, you can use `st_crop`
+
+You can crop an object into a rectangle by manually setting the corodinates of your rectangle. But remember the coordinates need to match the CRS of the sf dataframe! So if you want to crop using latitides/longitudes, you need to set the CRS to a system that uses latitudes/longitudes
+
+```{r}
+
+set_urbn_defaults(style = "print")
+dc_tracts_cropped <- st_crop(dc_tracts %>% st_transform(4326),
+  xmin = -77.05, xmax = -76, ymin = 38.78, ymax = 38.85
+)
+
+ggplot() +
+  geom_sf(data = dc_tracts_cropped)
+
+set_urbn_defaults(style = "map")
+```
+
+
+You can also crop an object using the bounds of another smaller object. This is very useful for example if you are working with county data, and have state boundaries, but want to limit the state boundaries to the area covered by your counties. The syntax is `st_crop(x,y)`, where x is the larger geometry and y is the smaller geometry you are cropping x to.
+
+```{r}
+one_tract <- dc_tracts %>% slice(1)
+
+cropped_dc_tracts <- st_crop(dc_tracts, one_tract)
+
+ggplot() +
+  geom_sf(data = cropped_dc_tracts)
+```
+
+
+
+A really useful list of all the spatial operations available in SF can be found here:
+
+[https://github.com/rstudio/cheatsheets/blob/master/sf.pdf](https://github.com/rstudio/cheatsheets/blob/master/sf.pdf)
+
+
 # Spatial Joins In Depth
 
-Last week, we covered spatial joins between points and polygons. But what about a polygon to polygon spatial join? What if we wanted to find out the Census tract(s) that DC parks are located in. We will still use `st_join` but we need to think critically about what kind of join to use (ie the `join=` argument inside `st_join`. This can affect your results without you realizing it. 
+Last week, we covered spatial joins between points and polygons. But what about a polygon to polygon spatial join? Say we wanted to find out the Census tract(s) that DC parks are located in. We will still use `st_join` but we need to think critically about what kind of join to use (ie the `join=` argument inside `st_join`. This can affect your results without you realizing it. 
 
 ### Exercise 1: Practicing Spatial Joins
 
@@ -168,153 +361,5 @@ ggplot(marvin_gaye_park_ints) +
 <font color="#55b748">**Step 2:**</font> Filter `dc_park_ints` to the park named "Pope Branch Park" and call it `town_center_park_ints`. How many tracts does it fall into? What tract has the highest proportion of the park?
 
 <font color="#55b748">**Step 3:**</font> Make a plot of the Pope Branch Park colored in by the `GEOID` of the Census Tract each part of the park is in.  
-
-# Calculating Distances
-
-Often, you will want to calculate the distance between two things - like the distance between two points, or a point and a polygon. There's a handy function called `st_distance()` that does this for you! But it spits out a *matrix* instead of the dataframes we're used to seeing. This can feel scary but don't worry! Let's see what the matrix looks like. Say we wanted to get the distance between the first 5 fire stations and 1 park
-
-```{r}
-
-ggplot() +
-  geom_sf(data = (dc_parks %>% slice(1)), fill = "green") +
-  geom_sf(data = (fire_stations %>% slice(1:5)), color = "red")
-
-
-dists <- st_distance(dc_parks %>% slice(1), fire_stations %>% slice(1:5))
-dists
-```
-
-As you can see there are 5 rows and 1 column, so the first argument in `st_distance` determines the number of rows and the second argument determines the number of columns. Let's say you wanted the shortest distance between the first park and the 5 fire stations. That's just the minimum of the first row! But because it's a matrix, we need to do some wrangling to get to the answer.
-
-
-```{r}
-min_dists <- dists %>%
-  as_tibble() %>%
-  mutate(min_dist = pmap_dbl(., min)) %>% # you can ignore this line for now, it just calculates the minimum of the row
-  select(min_dist)
-min_dists
-```
-
-
-Now say you wanted to do this for every park in the city:
- 
-```{r}
-dists <- st_distance(dc_parks, fire_stations %>% slice(1:5))
-
-min_dists <- dists %>%
-  as_tibble() %>%
-  mutate(min_dist = pmap_dbl(., min)) %>%
-  select(min_dist)
-min_dists
-```
-
-
-Now say you wanted to find the minimum distance between every park and its closest fire station: WARNING, the below code chunk may take a long time to run!
-
-```{r}
-dists <- st_distance(dc_parks, fire_stations)
-
-min_dists <- dists %>%
-  as_tibble() %>%
-  mutate(min_dist = pmap_dbl(., min)) %>%
-  select(min_dist)
-min_dists
-```
-
-
-`st_distance` can also be used to measure the distance between points and polygons, or polygons and polygons, but it will always calculate the distance to the closest edge of the polygon! 
-
-
-
-### st_centroid()
-This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract. 
-
-```{r}
-ggplot() +
-  geom_sf(data = dc_tracts) +
-  geom_sf(data = dc_tracts %>% st_centroid())
-```
-
-
-### Exercise 3: Calculating Distances
-<font color="#55b748">**Step 1:**</font> Calculate the distance between the first fire station (use `slice()`) and the first 5 DC tracts.
-
-
-<font color="#55b748">**Step 2:**</font> Calculate the minimum distance between each fire station and each DC tract. What do these values look like? And why?
-
-
-<font color="#55b748">**Step 3:**</font> Calculate the minimum distance between each fire station and *the centroid* of each DC tract. Append this information to the `fire_stations` dataframe as a column named `closest_fire_station_to_centroid`
-
-
-<font color="#55b748">**Step 4:**</font>Make a chloropleth map of distance to fire stations for every census tract centroid in DC. Use ggplot() and map the colors (ie the `fill=` variable) to `closest_fire_station_to_centroid`. 
-
-
-# Miscellanious Spatial Operations
-
-### st_union()
-Sometimes, you will need to combine multiple geometries together into one geometry. Let's say for example you wanted the total boundary of DC as a signle polygon, but all you had were the individual Census Tracts for all of DC. You can use `st_union()`! But be careful because by default it returns a `sfg` object not an sf dataframe, so you need to coerce it back to an sf dataframe 
-
-```{r}
-dc_boundary <- st_union(dc_tracts) %>% st_sf()
-
-ggplot() +
-  geom_sf(data = dc_tracts) +
-  geom_sf(data = dc_boundary, color = palette_urbn_cyan[4], size = 2)
-```
-
-
-### st_crop()
-If you need to crop your data, you can use `st_crop`
-
-You can crop an object into a rectangle by manually setting the corodinates of your rectangle. But remember the coordinates need to match the CRS of the sf dataframe! So if you want to crop using latitides/longitudes, you need to set the CRS to a system that uses latitudes/longitudes
-
-```{r}
-
-set_urbn_defaults(style = "print")
-dc_tracts_cropped <- st_crop(dc_tracts %>% st_transform(4326),
-  xmin = -77.05, xmax = -76, ymin = 38.78, ymax = 38.85
-)
-
-ggplot() +
-  geom_sf(data = dc_tracts_cropped)
-
-set_urbn_defaults(style = "map")
-```
-
-
-You can also crop an object using the bounds of another smaller object. This is very useful for example if you are working with county data, and have state boundaries, but want to limit the state boundaries to the area covered by your counties. The syntax is `st_crop(x,y)`, where x is the larger geometry and y is the smaller geometry you are cropping x to.
-
-```{r}
-one_tract <- dc_tracts %>% slice(1)
-
-cropped_dc_tracts <- st_crop(dc_tracts, one_tract)
-
-ggplot() +
-  geom_sf(data = cropped_dc_tracts)
-```
-
-
-
-A really useful list of all the spatial operations available in SF can be found here:
-
-[https://github.com/rstudio/cheatsheets/blob/master/sf.pdf](https://github.com/rstudio/cheatsheets/blob/master/sf.pdf)
-
-
-```{r, include = F}
-dc_outline <- st_boundary(dc_tracts)
-
-st_union(fire_stations)
-
-ggplot(dc_tracts) +
-  geom_sf(fill = "transparent") +
-  geom_sf(data = st_point_on_surface(dc_tracts))
-
-
-ggplot(st_boundary(dc_tracts) %>% slice(1)) +
-  geom_sf()
-
-ggplot((dc_tracts) %>% slice(1)) +
-  geom_sf()
-```
 
 
