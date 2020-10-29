@@ -1642,7 +1642,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Day 4: More Spatial Operations</h1>
 <h4 class="author">Ajjit Narayanan</h4>
-<h4 class="date">October 29, 2020 13:00</h4>
+<h4 class="date">October 29, 2020 14:28</h4>
 
 </div>
 
@@ -1715,12 +1715,12 @@ fire_stations &lt;- st_read(&quot;https://maps2.dcgis.dc.gov/dcgis/rest/services
 <li><p>If you want to change the variable text displayed on hover, use the <code>label</code> argument and feed in a column name in QUOTES.</p></li>
 <li><p>If you want to change the type of basemap being used in the background, use the <code>map.types</code> argument and feed in some of the following: <code>&quot;CartoDB.Positron&quot;, &quot;CartoDB.DarkMatter&quot;, &quot;OpenStreetMap&quot;, &quot;Esri.WorldImagery&quot;, &quot;OpenTopoMap&quot;</code>. For a full list of basemaps, see <a href="http://leaflet-extras.github.io/leaflet-providers/preview/">here</a>.</p></li>
 <li><p>If you want to change the title of the legend, you can use the <code>layer.name</code> argument and feed in the <code>&quot;title&quot;</code> of your choice.</p></li>
-<li><p>If you want to change the opacity of the colored in regeions of the map, use the <code>alpha.regions</code> argument and choose a number from <code>0</code> to <code>1</code> (like <code>0.3</code>).</p></li>
+<li><p>If you want to change the opacity of the colored in regions of the map, use the <code>alpha.regions</code> argument and choose a number from <code>0</code> to <code>1</code> (like <code>0.3</code>).</p></li>
 </ul>
 <div id="exercise-1" class="section level2">
 <h2>Exercise 1</h2>
 <p><font color="#55b748"><strong>Step 1:</strong></font> Make an interactive map of <code>dc_tracts</code> colored in by the <code>&quot;ALAND&quot;</code> variable (the area of the land covered by that tract). Call this map <code>dc_land</code>.</p>
-<p><font color="#55b748"><strong>Step 2:</strong></font> Make an interactive map of <code>dc_tracts</code> colored in by the <code>&quot;ALAND&quot;</code> variable (the area of the land covered by that tract). Call this map <code>dc_water</code>.</p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> Make an interactive map of <code>dc_tracts</code> colored in by the <code>&quot;AWATER&quot;</code> variable (the area of the land covered by that tract). Call this map <code>dc_water</code>.</p>
 <p><font color="#55b748"><strong>Step 3:</strong></font> Now make the Census tract names display on hover. They are contained in the <code>&quot;NAME&quot;</code> column.</p>
 </div>
 </div>
@@ -1735,7 +1735,7 @@ fire_stations &lt;- st_read(&quot;https://maps2.dcgis.dc.gov/dcgis/rest/services
 <div id="exercise-2" class="section level2">
 <h2>Exercise 2</h2>
 <p><font color="#55b748"><strong>Step 1:</strong></font> Now plot the DC parks on top of the DC census tracts using the <code>+</code> operator. What do you see?</p>
-<p><font color="#55b748"><strong>Step 2:</strong></font> For the <code>dc_tracts</code> mapview statement, set <code>col.regions = &quot;steelblue&quot;</code> and for the <code>dc_parks</code> mapview staetment set <code>col.regions = &quot;green&quot;</code></p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> For the <code>dc_tracts</code> mapview statement, set <code>col.regions = &quot;steelblue&quot;</code> and for the <code>dc_parks</code> mapview statement set <code>col.regions = &quot;green&quot;</code></p>
 <p><font color="#55b748"><strong>Step 3:</strong></font> Plot the <code>dc_land</code> and <code>dc_water</code> maps side by side using the <code>|</code> operator.</p>
 </div>
 </div>
@@ -1808,7 +1808,7 @@ min_dists</code></pre>
 <p><code>st_distance</code> can also be used to measure the distance between points and polygons, or polygons and polygons. Bear in mind however that it will always calculate the distance to the closest edge of the polygon!</p>
 <div id="st_centroid" class="section level3">
 <h3>st_centroid()</h3>
-<p>This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract.</p>
+<p>This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say fire stations and the center of a census tract.</p>
 <pre class="r"><code>ggplot() +
   geom_sf(data = dc_tracts) +
   geom_sf(data = dc_tracts %&gt;% st_centroid())</code></pre>
@@ -1817,7 +1817,7 @@ min_dists</code></pre>
 <div id="exercise-3-calculating-distances" class="section level3">
 <h3>Exercise 3: Calculating Distances</h3>
 <p><font color="#55b748"><strong>Step 1:</strong></font> Calculate the distance between the first fire station (use <code>slice()</code>) and the first 5 DC tracts (use <code>slice()</code> again).</p>
-<p><font color="#55b748"><strong>Step 2:</strong></font> Calculate the minimum distance between each fire station and each DC tract. What do these values look like? And why?</p>
+<p><font color="#55b748"><strong>Step 2:</strong></font> Calculate the minimum distance between each fire station and each DC tract. Be careful with the order of the <code>sf</code> dataframe you input into <code>st_distance</code>! What do these values look like and why?</p>
 <p><font color="#55b748"><strong>Step 3:</strong></font> Calculate the minimum distance between each fire station and <em>the centroid</em> of each DC tract. Append this information to the <code>fire_stations</code> dataframe as a column named <code>closest_fire_station_to_centroid</code></p>
 <p><font color="#55b748"><strong>Step 4:</strong></font>Make a chloropleth map of distance to fire stations for every census tract centroid in DC. Use ggplot() and map the colors (ie the <code>fill=</code> variable) to <code>closest_fire_station_to_centroid</code>.</p>
 </div>
@@ -1826,7 +1826,7 @@ min_dists</code></pre>
 <h1>Miscellanious Spatial Operations</h1>
 <div id="st_union" class="section level3">
 <h3>st_union()</h3>
-<p>Sometimes, you will need to combine multiple geometries together into one geometry. Let’s say for example you wanted the total boundary of DC as a signle polygon, but all you had were the individual Census Tracts for all of DC. You can use <code>st_union()</code>! But be careful because by default it returns a <code>sfg</code> object not an sf dataframe, so you need to coerce it back to an sf dataframe</p>
+<p>Sometimes, you will need to combine multiple geometries together into one geometry. Let’s say for example you wanted the total boundary of DC as a single polygon, but all you had were the individual Census Tracts for all of DC. You can use <code>st_union()</code>! But be careful because by default it returns a <code>sfg</code> object not an sf dataframe, so you need to coerce it back to an sf dataframe</p>
 <pre class="r"><code>dc_boundary &lt;- st_union(dc_tracts) %&gt;% st_sf()
 
 ggplot() +
@@ -1837,7 +1837,7 @@ ggplot() +
 <div id="st_crop" class="section level3">
 <h3>st_crop()</h3>
 <p>If you need to crop your data, you can use <code>st_crop</code></p>
-<p>You can crop an object into a rectangle by manually setting the corodinates of your rectangle. But remember the coordinates need to match the CRS of the sf dataframe! So if you want to crop using latitides/longitudes, you need to set the CRS to a system that uses latitudes/longitudes</p>
+<p>You can crop an object into a rectangle by manually setting the coordinates of your rectangle. But remember the coordinates need to match the CRS of the sf dataframe! So if you want to crop using latitudes/longitudes, you need to set the CRS to a system that uses latitudes/longitudes</p>
 <pre class="r"><code>set_urbn_defaults(style = &quot;print&quot;)
 dc_tracts_cropped &lt;- st_crop(dc_tracts %&gt;% st_transform(4326),
   xmin = -77.05, xmax = -76, ymin = 38.78, ymax = 38.85
