@@ -4,14 +4,14 @@ author: "Ajjit Narayanan"
 date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
 output:
   html_document:
-  number_sections: FALSE
-self_contained: TRUE
-code_folding: show
-toc: TRUE
-toc_float: TRUE
-css: ../www/web_report.css
-editor_options:
-  chunk_output_type: console
+    number_sections: FALSE
+    self_contained: TRUE
+    code_folding: show
+    toc: TRUE
+    toc_float: TRUE
+    css: ../www/web_report.css
+    editor_options:
+      chunk_output_type: console
 ---
   
   
