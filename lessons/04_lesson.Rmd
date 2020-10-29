@@ -105,14 +105,14 @@ Below are some of the many ways you can change the appearance of your interactiv
 
 * If you want to change the title of the legend, you can use the `layer.name` argument and feed in the    `"title"` of your choice.
 
-* If you want to change the opacity of the colored in regeions of the map, use the `alpha.regions` argument and choose a number from `0` to `1` (like `0.3`).
+* If you want to change the opacity of the colored in regions of the map, use the `alpha.regions` argument and choose a number from `0` to `1` (like `0.3`).
 
 
 ## Exercise 1
 
 <font color="#55b748">**Step 1:**</font> Make an interactive map of `dc_tracts` colored in by the `"ALAND"` variable (the area of the land covered by that tract). Call this map `dc_land`.
 
-<font color="#55b748">**Step 2:**</font> Make an interactive map of `dc_tracts` colored in by the `"ALAND"` variable (the area of the land covered by that tract). Call this map `dc_water`.
+<font color="#55b748">**Step 2:**</font> Make an interactive map of `dc_tracts` colored in by the `"AWATER"` variable (the area of the land covered by that tract). Call this map `dc_water`.
 
 <font color="#55b748">**Step 3:**</font> Now make the Census tract names display on hover. They are contained in the `"NAME"` column.
 
@@ -139,7 +139,7 @@ mapview(sf_dataframe) |
 
 <font color="#55b748">**Step 1:**</font> Now plot the DC parks on top of the DC census tracts using the `+` operator. What do you see?
 
-<font color="#55b748">**Step 2:**</font> For the `dc_tracts` mapview statement, set `col.regions = "steelblue"` and for the `dc_parks` mapview staetment set `col.regions = "green"`
+<font color="#55b748">**Step 2:**</font> For the `dc_tracts` mapview statement, set `col.regions = "steelblue"` and for the `dc_parks` mapview statement set `col.regions = "green"`
 
 <font color="#55b748">**Step 3:**</font> Plot the `dc_land` and `dc_water` maps side by side using the `|` operator.
 
@@ -204,7 +204,7 @@ min_dists
 
 
 ### st_centroid()
-This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say firestations and the center of a census tract. 
+This returns the centroid of a polygon geometry. This is useful if you want to calculate the distance between say fire stations and the center of a census tract. 
 
 ```{r}
 ggplot() +
@@ -217,7 +217,7 @@ ggplot() +
 <font color="#55b748">**Step 1:**</font> Calculate the distance between the first fire station (use `slice()`) and the first 5 DC tracts (use `slice()` again).
 
 
-<font color="#55b748">**Step 2:**</font> Calculate the minimum distance between each fire station and each DC tract. What do these values look like? And why?
+<font color="#55b748">**Step 2:**</font> Calculate the minimum distance between each fire station and each DC tract. Be careful with the order of the `sf` dataframe you input into `st_distance`! What do these values look like and why?
 
 
 <font color="#55b748">**Step 3:**</font> Calculate the minimum distance between each fire station and *the centroid* of each DC tract. Append this information to the `fire_stations` dataframe as a column named `closest_fire_station_to_centroid`
@@ -229,7 +229,7 @@ ggplot() +
 # Miscellanious Spatial Operations
 
 ### st_union()
-Sometimes, you will need to combine multiple geometries together into one geometry. Let's say for example you wanted the total boundary of DC as a signle polygon, but all you had were the individual Census Tracts for all of DC. You can use `st_union()`! But be careful because by default it returns a `sfg` object not an sf dataframe, so you need to coerce it back to an sf dataframe 
+Sometimes, you will need to combine multiple geometries together into one geometry. Let's say for example you wanted the total boundary of DC as a single polygon, but all you had were the individual Census Tracts for all of DC. You can use `st_union()`! But be careful because by default it returns a `sfg` object not an sf dataframe, so you need to coerce it back to an sf dataframe 
 
 ```{r}
 dc_boundary <- st_union(dc_tracts) %>% st_sf()
@@ -243,7 +243,7 @@ ggplot() +
 ### st_crop()
 If you need to crop your data, you can use `st_crop`
 
-You can crop an object into a rectangle by manually setting the corodinates of your rectangle. But remember the coordinates need to match the CRS of the sf dataframe! So if you want to crop using latitides/longitudes, you need to set the CRS to a system that uses latitudes/longitudes
+You can crop an object into a rectangle by manually setting the coordinates of your rectangle. But remember the coordinates need to match the CRS of the sf dataframe! So if you want to crop using latitudes/longitudes, you need to set the CRS to a system that uses latitudes/longitudes
 
 ```{r}
 
