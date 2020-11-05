@@ -1,6 +1,6 @@
 ---
 title: "Day 5: Making Pretty Maps"
-author: "Sarah Strochak"
+author: "Sarah Strochak and Fay Walker"
 date: "`r format(Sys.time(), '%B %d, %Y %H:%M')`"
 output:
   html_document:
@@ -46,7 +46,7 @@ Today, we are going to focus on creating a beautiful, styled map from start to f
 
 Make a new script. Call it whatever you want!
 
-Load the libraries you will need for this project at the top of the script. Use `library(urbnthemes)` to set your default to `"map"`.
+Today we will be working with tidyverse, tigris, sf, urbnthemes, and urbnmapr, if you haven't used tidyverse/tigris/sf submit `install.packages("WHATEVER PACKAGE YOU NEED")` to the Console.  If you haven't used urbnmapr or urbnthemes first submit `install.packages("devtools")` to the Console, then submit `remotes::install_github("UrbanInstitute/urbnmapr")` to the Console and/or `remotes::install_github("UrbanInstitute/urbnthemes")` to the Console, depending on what you need to install. Otherwise just load the following code and Use `library(urbnthemes)` to set your default to `"map"`.
 
 ```{r load-libraries}
 
@@ -205,6 +205,6 @@ ggplot() +
           fill = NA, color = "white", size = 1) +
   labs(fill = "Median borrower income, 2018")
 
-ggsave("lesson4-maps/my_map.png")
+ggsave("Data/income_dmv_map.png")
 
 ```
