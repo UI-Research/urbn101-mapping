@@ -205,6 +205,6 @@ ggplot() +
           fill = NA, color = "white", size = 1) +
   labs(fill = "Median borrower income, 2018")
 
-ggsave("Data/income_dmv_map.png")
+#ggsave("Data/income_dmv_map.png")
 
 ```
