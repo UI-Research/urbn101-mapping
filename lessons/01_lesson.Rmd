@@ -86,7 +86,19 @@ A few basics:
 With the cursor on the line (or selecting the text you want to run), hit Control-Enter simultaneously.
 
 # ggplot2
-To make maps in R, we use the `ggplot2` charting library. The power of this, is that we use almost identical syntax to create both graphs and maps in R
+To make maps in R, we use the `ggplot2` charting library. `ggplot2` is an R 
+package that is built upon the [Grammar of Graphics](https://cfss.uchicago.edu/notes/grammar-of-graphics/) and creates a readable 
+consistent syntax for creating charts and plots. All graphics in this library
+are built using a layered approach, building layers up to create the final 
+graphic. The power of this, is that we use almost identical syntax to create 
+both graphs and maps in R.
+
+```{r, eval = T, echo = F}
+knitr::include_graphics("../www/images/ggplot2_intro.png", dpi = 450)
+```
+
+picture credits: [\@allisonhorst](https://twitter.com/allison_horst)   
+
 
 <font color="#ec008b"> **`ggplot2` syntax** </font>
 
