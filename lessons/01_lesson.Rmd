@@ -87,7 +87,7 @@ With the cursor on the line (or selecting the text you want to run), hit Control
 
 # ggplot2
 To make maps in R, we use the `ggplot2` charting library. `ggplot2` is an R 
-package that is built upon the [Grammar of Graphics](https://cfss.uchicago.edu/notes/grammar-of-graphics/) and creates a readable 
+package that is built upon the [Grammar of Graphics](https://r4ds.had.co.nz/data-visualisation.html) and creates a readable 
 consistent syntax for creating charts and plots. All graphics in this library
 are built using a layered approach, building layers up to create the final 
 graphic. The power of this, is that we use almost identical syntax to create 
