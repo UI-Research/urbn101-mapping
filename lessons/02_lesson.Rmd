@@ -328,7 +328,7 @@ As you can see there is an `EPSG` code and a `proj4` string, either of which can
 After you read spatial data into R, the first thing you should do is check that the CRS is specified, In most cases, `sf` should automatically detect the right CRS, but sometimes it fails and the CRS may be empty. In this case it's up to you to provide the CRS (ie the EPSG code). You can set the CRS using `st_set_crs()`. You can also transform the CRS (if the data has a non standard CRS you don't want to use) using `st_transform()`. Some tips for finding the EPSG codes of a dataset:
 
   - For GeoJSON's, the EPSG code will always be 4326 as that is a requirement for all GeoJSON files. 
-  - For Shapefiles, you will need to open the .prj file and paste the contents into [http://prj2epsg.org](http://prj2epsg.org) to find the EPSG code
+  - For Shapefiles, you will need to open the .prj file and look for the CRS code.
     - For CSV's, assuming you have latitude and longitude points, it's a good bet that the EPSG code is 4326. But you may have to do some digging into metadata to find out exactly which crs is used.
   
   
@@ -342,11 +342,9 @@ After you read spatial data into R, the first thing you should do is check that 
 
 <font color="#55b748">**Step 3:**</font> Type `tor_zones` into the console and take a look at the geometry column. Do these points look funky?
 
-<font color="#55b748">**Step 4:**</font> Open the zoning_districts.prj file, copy the contents and use [http://prj2epsg.org](http://prj2epsg.org) to determine the relevant `EPSG` code. 
+<font color="#55b748">**Step 4:**</font> Confirm that `sf` used a CRS when it read in the shapefile by using `st_crs()` on the `tor_zones` dataframe.  
 
-<font color="#55b748">**Step 5:**</font> Confirm that SF used the correct EPSG code when it read in the shapefile by using `st_crs()` on the `tor_zones` dataframe.  
+<font color="#55b748">**Step 5:**</font>  Use [epsg.io](https://epsg.io) to find out what the units of this CRS is. 
 
-<font color="#55b748">**Step 6:**</font>  Use [epsg.io](https://epsg.io) to find out what the units of this CRS is. 
-
-<font color="#55b748">**Step 7:**</font> The actual coordinates of this coordinate system may look foreign to people used to lat/lons. So transform the CRS to 4326 to get latitude/longitude points. Name the transformed dataframe `tor_zones_transformed`.  
+<font color="#55b748">**Step 6:**</font> The actual coordinates of this coordinate system may look foreign to people used to lat/lons. So transform the CRS to `EPSG:4326` to get latitude/longitude points. Name the transformed dataframe `tor_zones_transformed`.  
 
