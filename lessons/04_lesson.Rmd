@@ -166,6 +166,7 @@ Keep in mind that the first argument in `st_distance` determines the number of r
 
 ```{r}
 min_dists <- dists %>%
+  # Conert matrix to tibble (ie a dataframe)
   as_tibble() %>%
   mutate(min_dist = pmap_dbl(., min)) %>% # This line looks complicated, but it just calculates the minimum of the row
   select(min_dist)
