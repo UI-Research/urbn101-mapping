@@ -1,8 +1,14 @@
 
+# Exercise 0 --------------------------------------------------------------
+
+# install.packages("tidyverse")
+# install.packages("remotes")
+# remotes::install_github("UrbanInstitute/urbnthemes")
+# remotes::install_github("UrbanInstitute/urbnmapr")
+
 library(tidyverse)
 library(urbnthemes)
 library(urbnmapr)
-
 
 # Exercise 1 --------------------------------------------------------------
 
@@ -10,7 +16,7 @@ states <- get_urbn_map(map = "states", sf = TRUE)
 
 ggplot() +
   geom_sf(data = states, mapping = aes())
-
+    
 
 ggplot() +
   geom_sf(
@@ -46,3 +52,10 @@ ggplot() +
   ) +
   scale_fill_manual(values = c("#f5cbdf", "#e54096", "#af1f6b", "#351123")) +
   labs(fill = "My categorical variable")
+
+
+
+
+
+
+
